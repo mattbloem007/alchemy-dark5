@@ -1,0 +1,247 @@
+/*-----------------------
+    Dark Home Style
+------------------------*/
+
+.remembrance {
+    font-size: 67px !important;
+    @media #{$sm-layout} {
+        font-size: 60px !important;
+    }
+
+    @media #{$large-mobile} {
+        font-size: 39px !important;
+    }
+}
+
+.active-dark {
+    background-color: #000;
+    color: #bbb;
+
+    .bg-color-white {
+        background: #000;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .h1,
+    .h2,
+    .h3,
+    .h4,
+    .h5,
+    .h6 {
+        color: #fff;
+    }
+
+    p {
+        color: #bbb;
+    }
+
+    .bg-color-grey {
+        background-color: #111;
+    }
+
+    a:hover,
+    a:focus,
+    a:active {
+        color: #fff;
+    }
+
+}
+
+.active-dark .service .inner .content p,
+.active-dark .testimonial-inner .client-info .info span {
+    color: #bbb;
+}
+
+.active-dark .service .inner .icon svg,
+.active-dark .testimonial-inner .client-info .info .title {
+    color: #fff;
+}
+
+.active-dark .portfolio .content .inner .category a {
+    color: #bbb;
+}
+
+.active-dark .section-title .title span.bg {
+    -webkit-text-stroke: 1px #fff;
+    color: transparent;
+}
+
+.active-dark .rn-slide.slider-style-01 .inner .content .title span,
+.active-dark .rn-project-details-area .portfolio-content .content-left ul.list_holder li span.icon,
+.active-dark .rn-project-details-area .portfolio-content .content-left ul.list_holder li span.icon svg {
+    color: #ffffff;
+}
+
+.active-dark .rn-slide.slider-style-01 .inner .content .subtitle {
+    color: #bbb;
+}
+
+.active-dark .header-default.scrolled {
+    background-color: #000;
+    box-shadow: 0 0 10px rgba(255, 255, 255, .06);
+}
+
+.active-dark ul.mainmenuwrapper li a::after {
+    background: #ffffff;
+}
+
+.active-dark ul.mainmenuwrapper li a .hover-item span::before {
+    color: #fff;
+}
+
+.active-dark .hover-item span::after,
+.active-dark .hover-item span::before {
+    color: #fff;
+}
+
+.active-dark .rn_surface::after {
+    background: #000;
+}
+
+.active-dark .rn_surface.animated::before {
+    background: #000;
+}
+
+.active-dark .about-style .content .title {
+    color: #fff;
+}
+
+.active-dark .about-style .content .title span.bg,
+.active-dark .portfolio-style-1 .section-title .title span.bg {
+    -webkit-text-stroke: 1px #fff;
+}
+
+.active-dark .about-style .content .description {
+    color: #bbb;
+}
+
+.active-dark .about-style .content .subtitle {
+    color: #bbb;
+}
+
+.active-dark a.rn-button,
+.active-dark button.rn-button {
+    border: 2px solid #fff;
+    background-color: #fff;
+    color: #000000;
+}
+
+.active-dark a.rn-button:hover,
+.active-dark button.rn-button:hover {
+    background-color: transparent;
+    color: #ffffff;
+}
+
+.active-dark .brand-list-wrapper .single-image {
+    border: 2px solid#121212;
+}
+
+.active-dark .title_holder,
+.active-dark .blog-details-wrapper .post-single-title .post-title {
+    border-bottom: 1px solid #121212;
+}
+
+.active-dark blockquote {
+    border-left: 4px solid #121212;
+}
+
+.active-dark .tag-list span {
+    color: #fff;
+}
+
+.active-dark .tags-cloud a {
+    border: 1px solid #121212;
+    color: #ddd;
+}
+
+.active-dark .about-style .content .title-wrap {
+    border-bottom: 1px solid #121212;
+}
+
+.active-dark .breadcrumbs li.active {
+    color: #ddd;
+}
+
+.active-dark .breadcrumbs li {
+    color: #fff;
+}
+
+.active-dark .tags-cloud a:hover {
+    background-color: #fff;
+    border-color: #fff;
+    color: #000000;
+}
+
+.active-dark .rn-nav-image-item li.nav-item a::after {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.active-dark .rn-nav-image-item li.nav-item a.active::after {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.active-dark .rn-nav-image-item li.nav-item a.active {
+    background: transparent;
+}
+
+.active-dark .testimonial-inner .icon svg {
+    fill: #ffffff;
+}
+
+.active-dark .content-block .post-content .read-more a {
+    color: #fff;
+}
+
+.active-dark .content-block .post-content .read-more a::before {
+    background-color: #ffffff;
+}
+
+.active-dark .form-group input,
+.active-dark .form-group textarea {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.active-dark .form-group label {
+    background: transparent;
+    color: #fff;
+}
+
+.active-dark .rn-footer-area {
+    border-top: 1px solid rgba(255, 255, 255, .2);
+}
+
+.active-dark .rn-slide.slider-style-01 .inner .content .title {
+    -webkit-text-stroke: 1px rgb(255, 255, 255);
+}
+
+.active-dark .content-block .post-content .title:hover {
+    color: #ffffff;
+}
+
+.active-dark .content-block .post-content span,
+.active-dark .content-block .post-content .author-name {
+    color: #fff;
+}
+
+
+.hambergur-menu .hamburger-box .hamburger-inner,
+.hambergur-menu .hamburger-box .hamburger-inner::after,
+.hambergur-menu .hamburger-box .hamburger-inner::before {
+    background-color: #fff;
+}
+.rn-slider-area .thumbnail::before {
+    background: #000;
+}
+.active-dark .form-group input:focus,
+.active-dark .form-group textarea:focus {
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+.active-dark .rn-project-details-area .portfolio-content .content-left ul.list_holder li span.projectinfo {
+    color: #bbb;
+}

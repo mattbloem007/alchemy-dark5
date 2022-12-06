@@ -1,0 +1,30 @@
+{
+    "id": "project-07",
+    "title": "Expanding Vitality",
+    "category": "ixCacao Journeys",
+    "client": "j",
+    "imgesBY": "Draxler",
+    "year": "2009 - 2019",
+    "featured_image": "./images/project-01.jpg",
+    "is_featured": true,
+    "body": [
+        "The Intention: Radiance is a journey into the body through daily practice and nutrition.",
+        " This journey intends to share nutritional wisdom that nourishes the body's natural beauty through daily spiritual practices coupled with medicinal foods.",
+        " Each day we will do a meditation practice and add in certain foods that rejuvenates our natural state.",
+        " There are no dietary restrictions to this journey.",
+        " Why Journey?",
+        " Beauty in this journey is defined as expressing our authentic selves in a body that is made to shine naturally.",
+        " The human body radiates a natural beauty when it is nourished well. Physical beauty is a result of proper nourishment. Feeling good in the body manifests a youthful look of glowing skin, healthy hair, nails, and fluid joints.",
+        "  With the addition of minerals, healthy oils, and medicinal foods, we can cultivate peace within that brings a natural state of radiance."
+    ],
+    "features": [
+        {
+            "id": "feature-1",
+            "image": "./images/project-02.jpg"
+        },
+        {
+            "id": "feature-2",
+            "image": "./images/project-03.jpg"
+        }
+    ]
+}

@@ -1,0 +1,123 @@
+.checkout {
+
+    &.wrapper {
+      display: flex;
+      justify-content: center;
+    }
+
+    &.heading {
+      margin-top: 2.5rem;
+      margin-left: 3rem;
+      color: $text-grey;
+    }
+
+      &.form {
+          background-color: white;
+          border: 2px solid white;
+          width: 50%;
+          padding: 1.5rem 2rem;
+          margin: 3rem;
+          margin-top: 1.5rem;
+      }
+
+      &.subheading {
+        font-size: 1.125rem;
+        font-style: bold;
+        color: --color-white;
+
+        &:not(:first-child) {
+          padding-top: 1.25rem;
+        }
+      }
+
+      &.label {
+          display: block;
+          font-size: 0.75rem;
+          font-style: bold;
+          color: $text-grey;
+          text-transform: uppercase;
+          padding-top: 0.75rem;
+      }
+
+      &.input {
+        border: 1px solid $text-primary;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+      }
+
+      &.select {
+        border: 1px solid $text-primary;
+        padding: 0.25rem 0.5rem;
+
+        select > option {
+          font-size: 0.875rem;
+        }
+      }
+
+      &.btn-confirm {
+         background-color: $text-primary;
+         border: 1px solid white;
+         padding-left: 1.25rem;
+         padding: 0.5rem 0.75rem;
+         font-size: 0.75rem;
+         text-transform: uppercase;
+         color: --color-white;
+         font-style: bold;
+         margin-top: 1.5rem;
+         display: block;
+
+          &:hover {
+              background-color: lighten(#292B83, 10);
+          }
+
+          &:disabled {
+            cursor: not-allowed;
+          }
+      }
+
+      &.summary {
+        margin-top: 1.5rem;
+        border: 2px solid white;
+        padding: 1.5rem 2rem;
+        height: max-content;
+
+        h4 {
+          font-style: bold;
+          color: --color-white;
+        }
+      }
+
+      &.summary-details {
+        // @apply flex my-3;
+        display: flex;
+        margin: 0.75rem;
+        justify-content: space-between;
+      }
+
+      &.summary-img {
+         width: 4rem;
+         height: 4rem;
+         border: 1px solid white;
+         margin-right: 0.75rem;
+         object-fit: cover;
+      }
+
+      &.summary-name {
+        color: --color-white;
+      }
+
+      &.summary-total {
+        margin-top: 30px;
+      }
+
+      &.summary-price {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+
+        span {
+          font-weight: bold;
+        }
+      }
+  }
