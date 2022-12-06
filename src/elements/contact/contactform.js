@@ -57,7 +57,7 @@ const ContactForm = ({url}) => {
 	}
 
     return (
-        <form onSubmit={() => handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div className={`form-group ${(isErrors && errors.name) ? 'has-error' : ''} ${value.name ? 'has-value' : ''}`}>
                 <input
                     type="text"

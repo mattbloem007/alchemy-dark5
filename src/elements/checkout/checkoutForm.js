@@ -193,7 +193,7 @@ const CheckoutForm = ({firstName,
 
 
     return (
-        <form onSubmit={() => handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
 
           <div className="col-lg-12">
               <div className="page-top">
