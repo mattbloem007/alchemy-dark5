@@ -1,0 +1,122 @@
+.cartnav {
+    position: fixed;
+    top: 2rem;
+    right: 3.25rem;
+    z-index: 999;
+
+    @media #{$lg-layout} {
+      left: 3.25rem;
+
+      &.cart-btn-open {
+          border: none;
+          display: flex;
+          width: 250px;
+      }
+    }
+    @media #{$md-layout} {
+      left: 3.25rem;
+
+      &.cart-btn-open {
+          border: none;
+          display: flex;
+          width: 250px;
+      }
+    }
+    @media #{$sm-layout} {
+      left: 3.25rem;
+
+      &.cart-btn-open {
+          border: none;
+          display: flex;
+          width: 250px;
+      }
+    }
+
+    &.cartBadge {
+        span {
+            font-size: 14px;
+            font-style: bold;
+            background-color: "red";
+            color: white;
+            padding: 0 0.25rem;
+            margin-left: -0.5rem;
+            border-radius: 50%;
+            vertical-align: top;
+        }
+    }
+
+    &.cart-btn-open {
+        border: none;
+    }
+
+    &.cart-close {
+        background-color: $text-primary;
+        padding: 0 0.25rem;
+        color: white;
+        margin-left: -0.25rem;
+        margin-top: -0.25rem;
+        margin-right: -0.5rem;
+        border-radius: 50%;
+        vertical-align: top;
+        width: 2.25rem;
+        height: 2.25rem;
+        border: none;
+    }
+}
+
+.cartnav2 {
+  position: fixed;
+  top: 1rem;
+  right: 3.25rem;
+  z-index: 999;
+
+  @media #{$lg-layout} {
+    left: 3.25rem;
+
+    &.cart-btn-open {
+        border: none;
+        display: flex;
+        width: 250px;
+    }
+  }
+  @media #{$md-layout} {
+    left: 3.25rem;
+
+    &.cart-btn-open {
+        border: none;
+        display: flex;
+        width: 250px;
+    }
+  }
+  @media #{$sm-layout} {
+    left: 3.25rem;
+
+    &.cart-btn-open {
+        border: none;
+        display: flex;
+        width: 250px;
+    }
+  }
+
+}
+
+.cartBadge {
+        font-size: 14px;
+        font-weight: bold;
+        background-color: red;
+        color: white;
+        padding: 0 0.35rem;
+        margin-left: -0.1rem;
+        border-radius: 50%;
+        vertical-align: super;
+
+        @media #{$lg-layout} {
+          padding: 0 0.85rem;
+        }
+        @media #{$md-layout} {
+          padding: 0 0.85rem;
+        }
+        @media #{$sm-layout} {
+          padding: 0 0.85rem;
+        }
+}
