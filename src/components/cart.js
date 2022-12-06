@@ -57,7 +57,7 @@ const Cart = (props) => {
   const renderTotal = () => {
     if (cart) {
       return(
-        <div className="row" style={{justifyContent: "space-between"}}>
+        <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: "33px"}}>
           <p>Subtotal:</p>
           <p style={{fontWeight: "bold"}}>{cart.subtotal.formatted_with_symbol}</p>
         </div>
@@ -80,9 +80,9 @@ const Cart = (props) => {
 
           <div className="col-lg-12" style={{justifyContent: "space-between"}}>
             { renderTotal() }
-            <div className="row cartButtonContainer">
-              <Calltoaction title="" buttonText="Empty Cart" action={handleEmptyCart} />
-              <a href="/checkout"><Calltoaction title="" buttonText="Checkout"  /></a>
+            <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: "23px"}}>
+              <button className="rn-button btn-white" onClick={handleEmptyCart} style={{display: "flex", justifyContent: "center", padding: "0px 30px"}}><span style={{whiteSpace: "nowrap"}}>Empty Cart</span></button>
+              <a href="/checkout"><button className="rn-button btn-white" style={{display: "flex", justifyContent: "center", padding: "0px 30px"}}><span style={{whiteSpace: "nowrap"}}>Checkout</span></button></a>
             </div>
           </div>
       </div>
