@@ -18,6 +18,21 @@
 import Alchemy from './src/root-wrapper'
 import React from 'react'
 
+// export function onRenderBody(
+//   { setHeadComponents,
+//     setPreBodyComponents,
+//   }
+// ) {
+//  setHeadComponents([
+//    <script src="https://www.paypalobjects.com/api/checkout.js"></script>,
+//   ])
+//   setPreBodyComponents([
+//     <div id="checkout">
+//       <div id="paypal-button-container"></div>
+//     </div>,
+//   ])
+// }
+
 const Wrapper = ({ element }) => {
   return <Alchemy element={element} />
 }

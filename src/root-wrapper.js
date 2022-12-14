@@ -1,6 +1,8 @@
 import React, {useEffect, useState } from 'react'
 import Layout from './components/layout'
 import commerce from './lib/Commerce';
+import { navigate } from "gatsby"
+
 
 const Alchemy = (props) => {
   const [cart, setCart] = useState({});
@@ -9,7 +11,7 @@ const Alchemy = (props) => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
 
 //  const [product, setProduct] = useState({});
-
+  console.log("PROPS", props)
   const fetchCart = () => {
   commerce.cart.retrieve().then((cart) => {
       setCart(cart);
@@ -79,13 +81,15 @@ const Alchemy = (props) => {
   };
 
   const handleCaptureCheckout = (checkoutTokenId, newOrder) => {
+    console.log("NEW ORDER", newOrder)
     commerce.checkout.capture(checkoutTokenId, newOrder).then((ord) => {
       // Save the order into state
+      console.log("ORDER", ord)
       setOrder(ord);
       // Clear the cart
       refreshCart();
       // Send the user to the receipt
-      props.navigate('/confirmation');
+      navigate('/confirmation');
       // Store the order in session storage so we can show it again if the
       // user refreshes the page!
       typeof window !== 'undefined' && window.sessionStorage.setItem('order_receipt', JSON.stringify(ord));

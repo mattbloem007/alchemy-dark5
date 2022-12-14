@@ -2,8 +2,8 @@ import React, { Component, useEffect, useState, useRef } from "react"
 import commerce from '../lib/Commerce';
 import CheckoutForm from '../elements/checkout/checkoutForm'
 import Layout from "../components/layout";
-
-
+import { graphql } from "gatsby";
+import { CircleSpinner } from "react-spinners-kit";
 
 const Checkout = (props) => {
 
@@ -150,6 +150,7 @@ const Checkout = (props) => {
     //              live={live}
                   onCaptureCheckout={props.onCaptureCheckout}
                   cart={props.cart}
+                  data={props.data}
     />
   );
 }
@@ -160,6 +161,7 @@ const Checkout = (props) => {
             <>
                 <div className="checkout summary">
                     <h4>Order summary</h4>
+                    {Object.entries(props.cart).length == 0 ? <CircleSpinner size={30} loading={true} /> : null}
                         {Object.entries(props.cart).length !== 0 && props.cart.line_items.map((lineItem) => {
                           console.log("lineItem", lineItem)
                           return(
@@ -209,5 +211,16 @@ const Checkout = (props) => {
       </>
     );
   };
+
+  export const currencyData = graphql`
+  query currencyDataQuery {
+    allOpenExchangeRates {
+      nodes {
+        currency
+        rate
+      }
+    }
+  }
+  `
 
 export default Checkout;

@@ -7,7 +7,7 @@ const commerceConfig = {
   axiosConfig: {
     headers: {
       'X-Chec-Agent': 'commerce.js/v2',
-      'Chec-Version': '2021-09-29',
+      'Chec-Version': '2021-09-29',//'2022-07-21',
     },
   },
 };

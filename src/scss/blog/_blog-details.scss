@@ -1,5 +1,5 @@
 /* ------------------
-Blog Details Area  
+Blog Details Area
 --------------------*/
 
 .blog-details-wrapper {
@@ -125,6 +125,13 @@ blockquote {
     }
     p {
         margin-bottom: 30px;
+
+        @media #{$md-layout} {
+            text-align: center;
+        }
+        @media #{$sm-layout} {
+            text-align: center;
+        }
     }
     .gatsby-image-wrapper {
         overflow: hidden;
@@ -136,4 +143,3 @@ blockquote {
     }
 
 }
-
