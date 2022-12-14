@@ -112,7 +112,7 @@ const Header = (props) => {
                                             </a>
                                         </li>
                                         <li>
-                                        {Object.entries(cart).length == 0 ? 
+                                        {cart && Object.entries(cart).length == 0 ? 
                                           <CircleSpinner size={30} loading={true} />
                                           :
                                           <CartNav
