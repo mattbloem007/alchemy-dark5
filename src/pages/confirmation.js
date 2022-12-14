@@ -33,6 +33,7 @@ const Confirmation = (props, {data}) => {
                                     <h1 className="theme-color">Order Confirmed</h1>
                                     <h4>Thank you for your purchase, {order.customer && order.customer.firstname} {order.customer && order.customer.lastname}!</h4>
                                     <span>Order ref:</span> {order.customer_reference && order.customer_reference}
+                                    <p>Please check your email from The Alchemy of Remembrance for your receipt and Download Link. (Also check spam if you don't see it in your email box)</p>
                                     <br/>
                                     <br/>
                                     <a className="rn-button" href="/">Go Back</a>
