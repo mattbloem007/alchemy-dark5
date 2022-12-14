@@ -4,6 +4,7 @@ import {useStaticQuery, graphql , Link} from 'gatsby';
 import Img from "gatsby-image";
 import Scrollspy from 'react-scrollspy';
 import CartNav from './cartnav'
+import { CircleSpinner } from "react-spinners-kit";
 
 // Start Header Area
 const HeaderNoSidebar = (props) => {
@@ -138,6 +139,9 @@ const HeaderNoSidebar = (props) => {
                                 </a>
                             </li>
                             <li>
+                            {Object.entries(cart).length == 0 ?
+                              <CircleSpinner size={30} loading={true} />
+                              :
                               <CartNav
                                 cart={cart}
                                 onUpdateCartQty={onUpdateCartQty}
@@ -149,6 +153,7 @@ const HeaderNoSidebar = (props) => {
                                 isOverlayOpen={isOverlayOpen}
                                 setOverlay={setOverlay}
                                 />
+                              }
                             </li>
                         </Scrollspy>
                     </div>

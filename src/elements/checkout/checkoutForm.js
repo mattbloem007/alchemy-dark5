@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import { useForm } from "react-hook-form";
 import { PaystackButton } from "react-paystack"
+import { loadScript } from "@paypal/paypal-js";
+import commerce from '../../lib/Commerce';
+import { CircleSpinner } from "react-spinners-kit";
 
-const CheckoutForm = ({firstName,
+const CheckoutForm = ({
+  data,
+  firstName,
   lastName,
   email,
   shippingName,
@@ -34,7 +39,17 @@ const CheckoutForm = ({firstName,
 		status: null
     });
 
-  let componentProps = {}
+    const [loading, setLoading] = useState(true)
+
+    let componentProps = {}
+    let paypal;
+
+  useEffect(() => {
+    console.log("Checkout token", cart, checkoutToken)
+    if (Object.keys(cart).length !== 0  && Object.keys(checkoutToken).length !== 0) {
+      handleCaptureCheckoutPayPal()
+    }
+  }, [checkoutToken])
 
 	const [value, setValue] = useState({
     lastName: '',
@@ -127,19 +142,17 @@ const CheckoutForm = ({firstName,
   }
 
   const onSuccess = (reference) => {
-    // Implementation for whatever you want to do with reference and after success call.
+
     console.log("REF", reference)
     handleCaptureCheckout(reference)
   };
 
-  // you can call this function anything
   const onClose = () => {
-    // implementation for  whatever you want to do when the Paystack dialog closed.
     console.log('closed')
   }
 
   const handleCaptureCheckout = (ref) => {
-
+    console.log("In handle checkout")
     const orderData = {
       line_items: sanitizedLineItems(cart.line_items),
       customer: {
@@ -179,16 +192,116 @@ const CheckoutForm = ({firstName,
     onCaptureCheckout(checkoutToken.id, orderData);
   };
 
+  const handleCaptureCheckoutPayPal = async (ref) => {
+
+    const orderData = {
+      line_items: sanitizedLineItems(cart.line_items),
+      customer: {
+        firstname: value.firstName,
+        lastname: value.lastName,
+        email: value.email,
+      },
+      payment: {
+        gateway: 'paypal',
+        paypal: {
+          action: 'authorize',
+        },
+      },
+    };
+
+    renderPaypalButton();
+  }
+
+  const renderPaypalButton = () => {
+
+    const filterCurrency = data.allOpenExchangeRates.nodes.filter(curr=>curr.currency=="ZAR");
+    let usdCurrency = parseFloat(cart.subtotal.raw) / filterCurrency[0].rate
+    console.log("usd value", filterCurrency[0].rate, cart.subtotal.raw)
+
+    loadScript({ "client-id": "AQgueuxjYVXkSyP6R47CpNuP8wsoy4sG2zjnQl0qZt1ZcsKOpVgE71ssvJ9nB970QE_OzVYFfdIwK0PT" })
+    .then((paypal) => {
+        paypal
+            .Buttons({
+              style: {
+                layout: 'horizontal',
+                color:  'gold',
+                shape:  'pill',
+                label:  'paypal'
+              },
+              createOrder: function(data, actions) {
+                // Set up the transaction
+
+                return actions.order.create({
+                  purchase_units: [{
+                    amount: {
+                      value: (usdCurrency.toFixed(2)).toString()
+                    }
+                  }]
+                });
+              },
+              onApprove: function(data, actions) {
+                // This function captures the funds from the transaction.
+                return actions.order.capture().then(function(details) {
+                  captureOrder(details)
+                });
+              }
+            })
+            .render("#paypalbutton")
+            .catch((error) => {
+                console.error("failed to render the PayPal Buttons", error);
+            });
+            setLoading(false)
+    })
+    .catch((error) => {
+        console.error("failed to load the PayPal JS SDK script", error);
+    });
+}
+
+const captureOrder = async (data) => {
+  try {
+    console.log("DATA", data)
+    const order = await commerce.checkout.capture(checkoutToken.id, {
+      customer: {
+        firstname: data.payer.name.given_name,
+        lastname: data.payer.name.surname,
+        email: data.payer.email_address,
+      },
+      payment: {
+        id: 'gway_9l6LJmxJE8Oyo1',
+        gateway: 'paypal',
+        paypal: {
+          action: 'capture',
+          payment_id: data.id,
+          payer_id: data.payer.payer_id,
+        },
+      },
+    })
+
+    // If we get here, the order has been successfully captured and the order detail is part of the `order` variable
+    console.log(order);
+    return;
+  } catch (response) {
+    // There was an issue capturing the order with Commerce.js
+    console.log(response);
+    alert(response.message);
+    return;
+  } finally {
+    // Any loading state can be removed here.
+  }
+}
+
   if (Object.entries(cart).length !== 0) { //&& Object.entries(live).length !== 0) {
+
     componentProps = {
       email: value.email,
-      amount: parseFloat(cart.subtotal.raw) * 100,
+      amount: parseFloat(cart.subtotal.raw) * 100 ,
       currency: "ZAR",
-      publicKey: "pk_live_b10691dc007bf4e394d92f0ad75f996e327736c6",
+      publicKey: "pk_live_b10691dc007bf4e394d92f0ad75f996e327736c6", //"pk_test_4f0dddba5d054ad67f1c38a665e1fe95017a06a1",
       text: "Pay Now",
       onSuccess,
       onClose,
     }
+
   }
 
 
@@ -450,10 +563,16 @@ const CheckoutForm = ({firstName,
             </div>*/}
 
             <div className="form-submit">
-              {Object.entries(componentProps).length !== 0 && <PaystackButton className="rn-button" type="submit"
-                disabled={serverState.submitting}
-                {...componentProps}
-                />}
+              {Object.entries(cart).length == 0 ? <CircleSpinner size={30} loading={loading} /> : null}
+              {Object.entries(componentProps).length !== 0 &&
+                <div>
+                  <PaystackButton className="rn-button" type="submit"
+                    disabled={serverState.submitting}
+                    {...componentProps}
+                  />
+                  <div id="paypalbutton" style={{marginTop: "10px"}}><CircleSpinner size={30} loading={loading} /></div>
+                </div>
+              }
                 {serverState.status && (
                     <p className={`form-output ${!serverState.status.ok ? "errorMsg" : "success"}`}>
                         {serverState.status.msg}
@@ -463,5 +582,7 @@ const CheckoutForm = ({firstName,
         </form>
     )
 }
+
+
 
 export default CheckoutForm;

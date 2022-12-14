@@ -5,6 +5,7 @@ import Img from "gatsby-image";
 import Scrollspy from 'react-scrollspy';
 import Image from "../../elements/image";
 import CartNav from './cartnav'
+import { CircleSpinner } from "react-spinners-kit";
 
 // Start Header Area
 const Header = (props) => {
@@ -111,6 +112,9 @@ const Header = (props) => {
                                             </a>
                                         </li>
                                         <li>
+                                        {Object.entries(cart).length == 0 ? 
+                                          <CircleSpinner size={30} loading={true} />
+                                          :
                                           <CartNav
                                             cart={cart}
                                             onUpdateCartQty={onUpdateCartQty}
@@ -120,6 +124,7 @@ const Header = (props) => {
                                             isCartVisible={isCartVisible}
                                             setCartVisible={setCartVisible}
                                             />
+                                             }
                                         </li>
 
                                     </Scrollspy>
