@@ -18,14 +18,14 @@ const Projectcard = ({image, id, title, category, column}) => {
         projectImg = <img src={image} alt={title}/>
     }
     return (
-        <div className={column}>
+        <div className={column} style={{display: "flex", justifyContent: "center"}}>
             <div className="portfolio">
                 <div className="thumbnail">
                     <Link to={`/project/${id}`}>
                         {projectImg}
                     </Link>
                 </div>
-                <div className="content">
+                <div className="content" style={{textAlign: "center"}}>
                     <div className="inner">
                         {title && <h4 className="title"><Link to={`/project/${id}`}>{title}</Link></h4>}
                         {category && <span className="category"><a href="#category">{category}</a></span>}

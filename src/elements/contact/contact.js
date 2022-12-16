@@ -26,7 +26,7 @@ const Contact = () => {
             <div className="container">
                 <div className="row">
                     <div className="col-lg-12">
-                        <div className="section-title">
+                        <div className="section-title" style={{textAlign: "center"}}>
                             <h2 className="title">
                                 {Title}
                                 <span className="bg">Contact</span>
@@ -35,7 +35,7 @@ const Contact = () => {
                     </div>
                 </div>
 
-                <div className="row row--45">
+                <div className="row row--45" style={{textAlign: "center"}}>
                     {/* Start Contact Form  */}
                     <div className="col-lg-6 col-12 mt--70 mt_md--30 mt_sm--40 wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms">
                         <div className="info">

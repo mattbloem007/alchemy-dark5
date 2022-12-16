@@ -19,7 +19,7 @@ const Project = () => {
             <div className="container">
                 <div className="row mb--10">
                     <div className="col-lg-12">
-                        <div className="section-title">
+                        <div className="section-title" style={{textAlign: "center"}}>
                             <h3 className="title">
                                 {Title}
                                 <span className="bg">Portfolio</span>
