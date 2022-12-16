@@ -11,6 +11,7 @@ const About = ( ) => {
                 description
                 subtitle
                 description2
+                description3
                 downloadButton
                 linkBUtton
 
@@ -29,6 +30,7 @@ const About = ( ) => {
     const Subtitle = aboutQueryData.homedefaultJson.subtitle;
     const description = aboutQueryData.homedefaultJson.description;
     const description2 = aboutQueryData.homedefaultJson.description2;
+    const description3 = aboutQueryData.homedefaultJson.description3;
     const downloadButton = aboutQueryData.homedefaultJson.downloadButton;
     const linkBUtton = aboutQueryData.homedefaultJson.linkBUtton;
     const PortfolioImages = aboutQueryData.file.childImageSharp.fixed;
@@ -53,14 +55,15 @@ const About = ( ) => {
                     <div className="col-lg-7">
                         <div className="inner">
                             <div className="content">
-                                <div className="section-title">
+                                <div className="section-title" style={{textAlign: "center"}}>
                                     <div className="title-wrap">
                                         <h3 className="title wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms">{title}<span className="bg">About</span></h3>
                                         {title && <h4 className="subtitle wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms" dangerouslySetInnerHTML={{ __html: Subtitle }}></h4>}
                                     </div>
 
                                     {description && <p className="description wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms" dangerouslySetInnerHTML={{ __html: description }}></p>}
-                                    {description && <p className="description wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms" dangerouslySetInnerHTML={{ __html: description2 }}></p>}
+                                    {description2 && <p className="description wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms" dangerouslySetInnerHTML={{ __html: description2 }}></p>}
+                                    {description3 && <p className="description wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms" dangerouslySetInnerHTML={{ __html: description3 }}></p>}
                                 </div>
                                 {/**<div className="button-group mt--30">
                                     {downloadButton && <a className="rn-button wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms" href="#downloadbutton"><span>{downloadButton}</span></a>}

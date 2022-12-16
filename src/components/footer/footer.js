@@ -25,7 +25,7 @@ const Footer = ({showBelow}) => {
     }
     return (
         <footer className="rn-footer-area bg-color-black pt--90 pb--60">
-            <div className="footer-wrapper">
+            <div className="footer-wrapper" style={{textAlign: "center"}}>
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-3 col-md-6 col-sm-6 col-12 mt_md--30 mt_sm--30 wow fadeInDown" data-wow-delay="200ms" data-wow-duration="0.1s">
@@ -44,7 +44,7 @@ const Footer = ({showBelow}) => {
                             </div>
                         </div>
 
-                        <div className="col-lg-3 col-md-6 col-sm-6 col-12 mt_md--30 mt_sm--30 wow fadeInDown" data-wow-delay="200ms" data-wow-duration="0.6s">
+                        <div className="col-lg-3 col-md-6 col-sm-6 col-12 mt_md--30 mt_sm--30 wow fadeInDown" data-wow-delay="200ms" data-wow-duration="0.6s" style={{display: "flex", justifyContent: "center"}}>
                             <div className="ft-info">
                                 <ul className="social-share">
                                     <li><a target="_blank" href="https://www.facebook.com/alchemyremembrance/"><FaFacebookF /></a></li>
