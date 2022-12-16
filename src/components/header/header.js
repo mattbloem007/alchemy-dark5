@@ -65,54 +65,54 @@ const Header = (props) => {
                                 <div className="menu_wrapper">
                                     <Scrollspy className="mainmenuwrapper" items={['home','about', 'portfolio', 'readings' , 'offerings', 'contact']} currentClassName="is-current" offset={-200}>
                                         <li>
-                                            <a className="menu-hover-link" href="/#home">
+                                            <Link className="menu-hover-link" to="/#home">
                                                 <span className="hover-item">
                                                     <span data-text="Home">Home</span>
                                                 </span>
-                                            </a>
+                                            </Link>
                                         </li>
 
                                         <li>
-                                            <a className="menu-hover-link" href="/#about">
+                                            <Link className="menu-hover-link" to="/#about">
                                                 <span className="hover-item">
                                                     <span data-text="About">About</span>
                                                 </span>
-                                            </a>
+                                            </Link>
                                         </li>
 
                                         <li>
-                                            <a className="menu-hover-link" href="/#portfolio">
+                                            <Link className="menu-hover-link" to="/#portfolio">
                                                 <span className="hover-item">
                                                     <span data-text="Portfolio">Portfolio</span>
                                                 </span>
-                                            </a>
+                                            </Link>
                                         </li>
 
                                         <li>
-                                            <a className="menu-hover-link" href="/#news">
+                                            <Link className="menu-hover-link" to="/#news">
                                                 <span className="hover-item">
                                                     <span data-text="Readings">Readings</span>
                                                 </span>
-                                            </a>
+                                            </Link>
                                         </li>
 
                                         <li>
-                                            <a className="menu-hover-link" href="/offerings">
+                                            <Link className="menu-hover-link" to="/offerings">
                                                 <span className="hover-item">
                                                     <span data-text="Offerings">Offerings</span>
                                                 </span>
-                                            </a>
+                                            </Link>
                                         </li>
 
                                         <li>
-                                            <a className="menu-hover-link" href="/#contact">
+                                            <Link className="menu-hover-link" to="/#contact">
                                                 <span className="hover-item">
                                                     <span data-text="Contact">Contact</span>
                                                 </span>
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
-                                        {cart && Object.entries(cart).length == 0 ? 
+                                        {cart && Object.entries(cart).length == 0 ?
                                           <CircleSpinner size={30} loading={true} />
                                           :
                                           <CartNav
