@@ -2,9 +2,9 @@ import React from 'react';
 import Img from "gatsby-image";
 import {GatsbyImage} from 'gatsby-plugin-image'
 import Image from "../elements/image";
-import { FiList, FiUser, FiInstagram } from "react-icons/fi";
+import { FiList, FiUser, FiInstagram, FiArrowLeftCircle } from "react-icons/fi";
 import Layout from "../components/layout";
-import { graphql } from 'gatsby'
+import { graphql, Link } from 'gatsby'
 import Calltoaction from '../elements/calltoaction/calltoaction'
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer"
 import { BLOCKS, MARKS } from "@contentful/rich-text-types"
@@ -46,12 +46,13 @@ const ProjectDetails = ({data}) => {
                                     <div className="row">
                                         <div className="col-lg-12 col-md-12 col-12">
                                             <div className="content-left">
-                                                <div className="page-top">
+                                                <Link to="/#portfolio"><FiArrowLeftCircle size={50} /></Link>
+                                                <div className="page-top" style={{display: "flex", justifyContent: "center", textAlign: "center"}}>
                                                     <h1 className="title_holder">{projectData.title}</h1>
                                                 </div>
-                                                {/**<div className="thumbnail mt--90 mt_md--40 mt_sm--40">
+                                                <div className="thumbnail mt_md--40 mt_sm--40" style={{display: "flex", justifyContent: "center"}}>
                                                   <GatsbyImage image={projectData.featured_image.fixed} alt={projectData.title}/>;
-                                                </div>*/}
+                                                </div>
                                                 <h3 className="mt--20">Details</h3>
                                                 <ul className="list_holder">
                                                     <li><span className="icon"><FiList />Category:</span><span className="projectinfo">{projectData.category}</span></li>
@@ -59,7 +60,8 @@ const ProjectDetails = ({data}) => {
                                                     <li><span className="icon"><FiInstagram />Images by:</span><span className="projectinfo">{projectData.imgesBY}</span></li>*/}
                                                 </ul>
                                                 {projectData.body ? documentToReactComponents(JSON.parse(data.contentfulProjects.body.raw, options)) : null}
-                                                <a href={`/product/${projectData.projectId}`}><Calltoaction title="" buttonText="Join this Journey" /></a>
+                                                <Link style={{display: "flex", justifyContent: "center"}} to={`/product/${projectData.projectId}`}><Calltoaction title="" buttonText="Join this Journey" /></Link>
+                                                <Link to="/#portfolio"><FiArrowLeftCircle size={50} /></Link>
                                             </div>
                                         </div>
 

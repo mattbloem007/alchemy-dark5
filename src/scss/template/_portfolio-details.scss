@@ -1,5 +1,5 @@
 /*-------------------------
-Portfolio Details  
+Portfolio Details
 -------------------------*/
 
 
@@ -22,7 +22,7 @@ Portfolio Details
             }
         }
     }
-    
+
     .portfolio-content {
         .content-left {
             h3 {
@@ -68,9 +68,11 @@ Portfolio Details
             }
             @media #{$md-layout} {
                 padding: 0 50px;
+                text-align: center;
             }
             @media #{$sm-layout} {
                 padding: 0 30px;
+                text-align: center;
             }
             @media #{$large-mobile} {
                 padding: 0;
@@ -93,4 +95,3 @@ Portfolio Details
     }
 
 }
-

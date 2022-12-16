@@ -39,7 +39,7 @@ These journeys intend for you to experience the sensations and healing of daily 
 
 <h6 style="text-align: center; font-weight: bold;">A Global Sacred Container</h6>
 
-<p>Each journey will be held within sacred space and maintained primarily by Matthew Gabriel, the facilitator, until it has been completed. A sacred container is an energetic field coded with specific prayers and intentions for each journey. Within this field, we become connected and share an intimate process together. ixCacao will be our main plant ally and guide during this container. In the comfort of your own home and sacred space, you will be able to safely journey with ixCacao with the guidance of your own ancestors, plant allies, and spirit guides.</p>
+<p>Each journey will be held within sacred space and maintained primarily by Matthew Gabriel, the facilitator, until it has been completed. A sacred container is an energetic field coded with specific prayers and intentions for each journey. Within this field, we become connected and share an intimate process together. ixCacao will be our main plant ally and guide during this container. In the comfort of your own home and sacred space, you will be able to safely journey with ixCacao with the guidance of your own ancestors, plant allies, and spirit guides. Check out the current journeys available <a style="text-decoration: underline; color: orange;" href="/#portfolio"> here</a></p>
 
 <div class="wp-block-gallery">
     <ul class="blocks-gallery-grid columns-2" style="justify-content: center;">
