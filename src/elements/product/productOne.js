@@ -11,6 +11,7 @@ const ProductOne = () => {
             node {
               id
               name
+              permalink
               image {
                 url
               }
@@ -68,7 +69,8 @@ const ProductOne = () => {
                     image={fluidImage.node.childImageSharp}
                     title={data.node.name}
                     category={data.node.categories[0].name}
-                    price={data.node.price.formatted_with_symbol}å
+                    price={data.node.price.formatted_with_symbol}
+                    permalink={data.node.permalink}
                 />
             )})}
         </div>

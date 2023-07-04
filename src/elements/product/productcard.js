@@ -4,7 +4,7 @@ import Image from "../image";
 import Img from 'gatsby-image'
 
 
-const Productcard = ({image, id, title, category, column, price}) => {
+const Productcard = ({image, id, permalink, title, category, column, price}) => {
     let projectImg;
     console.log(image)
     if(image.fixed && typeof image.fixed !== 'function'){
@@ -18,13 +18,13 @@ const Productcard = ({image, id, title, category, column, price}) => {
         <div className={column}>
             <div className="portfolio">
                 <div className="thumbnail">
-                    <Link to={`/product/${id}`}>
+                    <Link to={`/store/${permalink}`}>
                         {projectImg}
                     </Link>
                 </div>
                 <div className="content">
                     <div className="inner">
-                        {title && <h4 className="title"><Link to={`/project/${id}`}>{title}</Link></h4>}
+                        {title && <h4 className="title"><Link to={`/store/${permalink}`}>{title}</Link></h4>}
                         {category && <span className="category"><a href="#category">{category}</a><br/></span>}
                         {price && <span className="category">{price}</span>}
                     </div>
