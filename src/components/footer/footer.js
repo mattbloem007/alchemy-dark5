@@ -46,7 +46,7 @@ const Footer = ({showBelow}) => {
 
                         <div className="col-lg-3 col-md-6 col-sm-6 col-12 mt_md--30 mt_sm--30 wow fadeInDown" data-wow-delay="200ms" data-wow-duration="0.4s">
                             <div className="ft-info">
-                                <p>About<br /><Link to="/policy">Privacy Policy</Link><br/><Link to="/terms">Terms & Conditions</Link></p>
+                                <p>About<br /><Link style={{color: "white"}} to="/policy">Privacy Policy</Link><br/><Link style={{color: "white"}} to="/terms">Terms & Conditions</Link></p>
                             </div>
                         </div>
 
