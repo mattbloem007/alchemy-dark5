@@ -83,6 +83,7 @@ exports.createPages = ({actions, graphql}) => {
                 node {
                   id
                   name
+                  permalink
                   image {
                     url
                   }
@@ -221,7 +222,7 @@ exports.createPages = ({actions, graphql}) => {
           let urlString = product.node.image.url.split("|")
           let url = urlString[0] + "%7C" + urlString[1]
             createPage({
-                path: `/product/${product.node.id}`,
+                path: `/store/${product.node.permalink}`,
                 component: templates.productPage,
                 context: {
                     id: product.node.id,
