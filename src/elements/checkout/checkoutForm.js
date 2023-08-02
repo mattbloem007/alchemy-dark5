@@ -25,9 +25,11 @@ const CheckoutForm = ({
   ccv,
   fetchSubdivisions,
   fetchShippingOptions,
+  fetchProduct,
   checkoutToken,
   sanitizedLineItems,
   cart,
+  productsHas,
 //  live,
   onCaptureCheckout
 }) => {
@@ -40,16 +42,28 @@ const CheckoutForm = ({
     });
 
     const [loading, setLoading] = useState(true)
-
+    const [cartItems, setItems] = useState([])
+    const [isShipping, setShipping] = useState(false)
     let componentProps = {}
     let paypal;
+    let shipHas = JSON.parse(sessionStorage.getItem("productHas"))
+    console.log("LOCAL Storage", shipHas)
 
   useEffect(() => {
-    console.log("Checkout token", cart, checkoutToken)
     if (Object.keys(cart).length !== 0  && Object.keys(checkoutToken).length !== 0) {
+      console.log("SHIPPING?")
+      if (shipHas.find(x => x.digital_delivery === false)) {
+        console.log("there is shipping")
+        setShipping(true)
+      }
+      console.log("there is NO shipping")
       handleCaptureCheckoutPayPal()
     }
   }, [checkoutToken])
+
+
+
+
 
 	const [value, setValue] = useState({
     lastName: '',
@@ -100,6 +114,19 @@ const CheckoutForm = ({
 		}
     };
 
+    useEffect(() => {
+      if (Object.keys(cart).length !== 0  && Object.keys(checkoutToken).length !== 0) {
+        console.log("SHIPPING?", shipHas)
+        let shipping = shipHas.find(x => x.digital_delivery === false)
+        console.log("SHIPPING?", shipping)
+        if (productsHas.find(x => x.digital_delivery === false)) {
+          console.log("there is shipping")
+          setShipping(true)
+        }
+        console.log("there is NO shipping")
+      }
+    }, [value])
+
 
     const onSubmit = (data, e) => {
 		// const form = e.target;
@@ -120,8 +147,6 @@ const CheckoutForm = ({
   const isErrors = Object.keys(errors).length !== 0 && true;
 	const onChangeHandler = e => {
 		setValue({ ...value, [e.target.name]: e.target.value })
-    console.log("value", value)
-
 	}
 
   const handleShippingCountryChange = (e) => {
@@ -160,19 +185,19 @@ const CheckoutForm = ({
         lastname: value.lastName,
         email: value.email,
       },
-      // shipping: {
-      //   name: value.shippingName,
-      //   street: value.shippingStreet,
-      //   town_city: value.shippingCity,
-      //   county_state: value.shippingSubdivision,
-      //   postal_zip_code: value.shippingPostalZipCode,
-      //   country: value.shippingCountry,
-      // },
-      // fulfillment: {
-      //   shipping_method: shippingOptions[0].id
-      // },
+      shipping: {
+        name: value.firstName + " " + value.lastName,
+        street: value.shippingStreet,
+        town_city: value.shippingCity,
+        county_state: value.shippingSubdivision,
+        postal_zip_code: value.shippingPostalZipCode,
+        country: value.shippingCountry,
+      },
+      fulfillment: {
+        shipping_method: shippingOptions[0].id
+      },
       payment: {
-        id: 'gway_Y5eDARaA6K49o3',
+        id: 'gway_zoBZa8LavyNOoP', // live gway_Y5eDARaA6K49o3
         gateway: 'paystack',
         paystack: {
           reference: ref.reference
@@ -187,7 +212,7 @@ const CheckoutForm = ({
       },
       pay_what_you_want: '2222.00',
     };
-    console.log("Order data", orderData)
+    console.log(checkoutToken.id, "Order data", orderData)
 
     onCaptureCheckout(checkoutToken.id, orderData);
   };
@@ -291,19 +316,22 @@ const captureOrder = async (data) => {
 }
 
   if (Object.entries(cart).length !== 0) { //&& Object.entries(live).length !== 0) {
-
+    console.log("CART", shippingOptions)
+    let total = parseFloat(cart.subtotal.raw)
+    if(shippingOptions[0]) {
+      total = total + parseFloat(shippingOptions[0].price.raw)
+    }
     componentProps = {
       email: value.email,
-      amount: parseFloat(cart.subtotal.raw) * 100 ,
+      amount: total * 100 ,
       currency: "ZAR",
-      publicKey: "pk_live_b10691dc007bf4e394d92f0ad75f996e327736c6", //"pk_test_4f0dddba5d054ad67f1c38a665e1fe95017a06a1",
+      publicKey: "pk_live_b10691dc007bf4e394d92f0ad75f996e327736c6",//"pk_test_4f0dddba5d054ad67f1c38a665e1fe95017a06a1",
       text: "Pay Now",
       onSuccess,
       onClose,
     }
 
   }
-
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -360,26 +388,12 @@ const captureOrder = async (data) => {
                 {errors.email && <span className="error">{errors.email.message}</span>}
             </div>
 
-
-            {/**<div className="col-lg-12">
+            {isShipping &&
+              <>
+              <div className="col-lg-12">
                 <div className="page-top">
                     <h5 className="title_holder">Shipping Details</h5>
                 </div>
-            </div>
-
-            <div className={`form-group ${(isErrors && errors.shippingName) ? 'has-error' : ''} ${value.shippingName ? 'has-value' : ''}`}>
-                <input
-                    type="text"
-                    name="shippingName"
-                    id="shippingName"
-                    value={shippingName}
-                    onChange={onChangeHandler}
-                    ref={register({
-                        required: 'Full Name Required',
-                    })}
-                />
-                <label htmlFor="subject">Full Name</label>
-                {errors.shippingName && <span className="error">{errors.shippingName.message}</span>}
             </div>
 
             <div className={`form-group ${(isErrors && errors.shippingStreet) ? 'has-error' : ''} ${value.shippingStreet ? 'has-value' : ''}`}>
@@ -388,10 +402,10 @@ const captureOrder = async (data) => {
                   name="shippingStreet"
                   id="shippingStreet"
                   value={shippingStreet}
-                  onChange={onChangeHandler}
-                  ref={register({
-                      required: 'Shipping street Required',
-                  })}
+                  {...register('shippingStreet', {
+                    onChange: (e) => {onChangeHandler(e)},
+                    required: 'Shipping street Required',
+                   })}
               />
                 <label htmlFor="message">Street Address</label>
                 {errors.shippingStreet && <span className="error">{errors.shippingStreet.message}</span>}
@@ -403,10 +417,10 @@ const captureOrder = async (data) => {
                     name="shippingCity"
                     id="shippingCity"
                     value={shippingCity}
-                    onChange={onChangeHandler}
-                    ref={register({
-                        required: 'City Required',
-                    })}
+                    {...register('shippingCity', {
+                      onChange: (e) => {onChangeHandler(e)},
+                      required: 'City Required',
+                     })}
                 />
                 <label htmlFor="subject">City</label>
                 {errors.shippingCity && <span className="error">{errors.shippingCity.message}</span>}
@@ -418,22 +432,24 @@ const captureOrder = async (data) => {
                     name="shippingPostalZipCode"
                     id="shippingPostalZipCode"
                     value={shippingPostalZipCode}
-                    onChange={onChangeHandler}
-                    ref={register({
-                        required: 'City Required',
-                    })}
+                    {...register('shippingPostalZipCode', {
+                      onChange: (e) => {onChangeHandler(e)},
+                      required: 'Zip Code Required',
+                     })}
                 />
-                <label htmlFor="subject">Postal/Zip Code</label>
+                <label htmlFor="subject">Zip Code</label>
                 {errors.shippingPostalZipCode && <span className="error">{errors.shippingPostalZipCode.message}</span>}
             </div>
 
-            <div className="row">
-              <div className="col-lg-2">
+            <div className="row" style={{marginBottom: "20px"}}>
+              <div className="col-lg-4">
                 <label htmlFor="subject">Country</label>
               </div>
               <div className="col-lg-8">
                 <select
                   value={value.shippingCountry}
+                  className="form-select"
+                  style={{width: "50%", textAlign: "center", fontSize: "1.5rem"}}
                   name="shippingCountry"
                   id="shippingCountry"
                   onChange={handleShippingCountryChange}
@@ -445,18 +461,20 @@ const captureOrder = async (data) => {
                         <option value={index} key={index}>{shippingCountries[index]}</option>
                       )
                     })
-                  };
+                  }
                   </select>
                 </div>
             </div>
 
-            <div className="row">
-              <div className="col-lg-2">
+            <div className="row" style={{marginBottom: "20px"}}>
+              <div className="col-lg-4">
                 <label htmlFor="subject">State/Province</label>
               </div>
               <div className="col-lg-8">
                 <select
                   value={value.shippingSubdivision}
+                  className="form-select"
+                  style={{width: "50%", textAlign: "center", fontSize: "1.5rem"}}
                   name="shippingSubdivision"
                   id="shippingSubdivision"
                   onChange={handleSubdivisionChange}
@@ -468,19 +486,21 @@ const captureOrder = async (data) => {
                         <option value={index} key={index}>{shippingSubdivisions[index]}</option>
                       )
                     })
-                  };
+                  }
                   </select>
                 </div>
             </div>
 
-            <div className="row">
-                <div className="col-lg-2">
+            <div className="row" style={{marginBottom: "20px"}}>
+                <div className="col-lg-4">
                   <label htmlFor="subject">Shipping method</label>
                 </div>
                 <div className="col-lg-8">
                   <select
                     value={value.shippingOption}
                     name="shippingOption"
+                    className="form-select"
+                    style={{width: "50%", textAlign: "center", fontSize: "1.5rem"}}
                     id="shippingOption"
                     onChange={handleShippingOptionChange}
                     >
@@ -488,79 +508,16 @@ const captureOrder = async (data) => {
                     {
                       Object.entries(shippingOptions).length !== 0 && shippingOptions.map((method, index) => {
                         return (
-                          <option value={method.id} key={index}>{`${method.description} - $${method.price.formatted_with_code}` }</option>
+                          <option value={method.id} key={index}>{`${method.description} - ${method.price.formatted_with_code}` }</option>
                         )
                       })
-                    };
+                    }
                     </select>
                 </div>
             </div>
+            </>
+          }
 
-            <div className="col-lg-12" style={{marginTop: "50px"}}>
-                <div className="page-top">
-                    <h5 className="title_holder">Payment Details</h5>
-                </div>
-            </div>
-
-            <div className={`form-group ${(isErrors && errors.cardNum) ? 'has-error' : ''} ${value.cardNum ? 'has-value' : ''}`}>
-                <input
-                    type="text"
-                    name="cardNum"
-                    id="cardNum"
-                    value={cardNum}
-                    onChange={onChangeHandler}
-                    ref={register({
-                        required: 'Card number Required',
-                    })}
-                />
-                <label htmlFor="subject">Credit card number</label>
-                {errors.cardNum && <span className="error">{errors.cardNum.message}</span>}
-            </div>
-
-            <div className={`form-group ${(isErrors && errors.expMonth) ? 'has-error' : ''} ${value.expMonth ? 'has-value' : ''}`}>
-                <input
-                    type="text"
-                    name="expMonth"
-                    id="expMonth"
-                    value={expMonth}
-                    onChange={onChangeHandler}
-                    ref={register({
-                        required: 'Expiry month Required',
-                    })}
-                />
-                <label htmlFor="subject">Expiry month</label>
-                {errors.expMonth && <span className="error">{errors.expMonth.message}</span>}
-            </div>
-
-            <div className={`form-group ${(isErrors && errors.expYear) ? 'has-error' : ''} ${value.expYear ? 'has-value' : ''}`}>
-                <input
-                    type="text"
-                    name="expYear"
-                    id="expYear"
-                    value={expYear}
-                    onChange={onChangeHandler}
-                    ref={register({
-                        required: 'Expiry year Required',
-                    })}
-                />
-                <label htmlFor="subject">Expiry Year</label>
-                {errors.expYear && <span className="error">{errors.expYear.message}</span>}
-            </div>
-
-            <div className={`form-group ${(isErrors && errors.ccv) ? 'has-error' : ''} ${value.ccv ? 'has-value' : ''}`}>
-                <input
-                    type="text"
-                    name="ccv"
-                    id="ccv"
-                    value={ccv}
-                    onChange={onChangeHandler}
-                    ref={register({
-                        required: 'CCV Required',
-                    })}
-                />
-                <label htmlFor="subject">CCV</label>
-                {errors.ccv && <span className="error">{errors.ccv.message}</span>}
-            </div>*/}
 
             <div className="form-submit">
               {Object.entries(cart).length == 0 ? <CircleSpinner size={30} loading={loading} /> : null}
