@@ -85,23 +85,29 @@ const Checkout = (props) => {
   // }
 
   const fetchShippingCountries = (checkoutTokenId) => {
-    console.log("checkoutTokenId", checkoutTokenId)
+
     commerce.services.localeListShippingCountries(checkoutTokenId)
       .then((countries) => {
+        console.log("countries", countries.countries)
         setShippingCountries(countries.countries)
+        fetchSubdivisions(Object.keys(countries.countries))
       })
-      .then(() => fetchSubdivisions(allCountries[0]))
+      //.then((countries) => fetchSubdivisions(Object.keys(countries.countries)))
       .catch((error) => {
       console.log('There was an error fetching a list of shipping countries', error);
     });
   }
 
   const fetchSubdivisions = (countryCode) => {
-    commerce.services.localeListSubdivisions(countryCode).then((subdivisions) => {
-        setShippingSubDivisions(subdivisions.subdivisions)
-    }).catch((error) => {
-        console.log('There was an error fetching the subdivisions', error);
-    });
+    console.log("code", countryCode.length)
+    if (countryCode.length != 0) {
+      commerce.services.localeListSubdivisions(countryCode).then((subdivisions) => {
+          console.log("subdivisions", subdivisions.subdivisions)
+          setShippingSubDivisions(subdivisions.subdivisions)
+      }).catch((error) => {
+          console.log('There was an error fetching the subdivisions', error);
+      });
+    }
   }
 
   const fetchShippingOptions = (checkoutTokenId, country, stateProvince = null) => {
@@ -149,8 +155,11 @@ const Checkout = (props) => {
                   shippingSubdivisions={subdivisions}
     //              live={live}
                   onCaptureCheckout={props.onCaptureCheckout}
+                  fetchProduct={props.fetchProduct}
+                  getCartContents={props.getCartContents}
                   cart={props.cart}
                   data={props.data}
+                  productsHas={props.productsHas}
     />
   );
 }
