@@ -46,7 +46,7 @@ const CheckoutForm = ({
     const [isShipping, setShipping] = useState(false)
     let componentProps = {}
     let paypal;
-    let shipHas = JSON.parse(sessionStorage.getItem("productHas"))
+    let shipHas = JSON.parse(typeof window !== 'undefined' && window.sessionStorage.getItem("productHas"))
     console.log("LOCAL Storage", shipHas)
 
   useEffect(() => {

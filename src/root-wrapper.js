@@ -54,12 +54,16 @@ const Alchemy = (props) => {
     commerce.cart.add(productId, quantity, variantID).then((item) => {
       console.log("cart", item)
       setProductsHas([...productsHas, has])
-      let existingHas = JSON.parse(sessionStorage.getItem("productHas"))
+      // let info;
+      // if(typeof window !== 'undefined') {
+      //   info = window.sessionStorage.getItem("productHas")
+      // }
+      let existingHas = JSON.parse(typeof window !== 'undefined' && window.sessionStorage.getItem("productHas"))
       if (existingHas == null) {
         existingHas = []
       }
       existingHas.push(has)
-      sessionStorage.setItem("productHas", JSON.stringify(existingHas))
+      typeof window !== 'undefined' && window.sessionStorage.setItem("productHas", JSON.stringify(existingHas))
       setCart(item);
     }).catch((error) => {
       console.error('There was an error adding the item to the cart', error);
