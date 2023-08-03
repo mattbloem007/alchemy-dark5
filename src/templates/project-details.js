@@ -60,7 +60,7 @@ const ProjectDetails = ({data}) => {
                                                     <li><span className="icon"><FiInstagram />Images by:</span><span className="projectinfo">{projectData.imgesBY}</span></li>*/}
                                                 </ul>
                                                 {projectData.body ? documentToReactComponents(JSON.parse(data.contentfulProjects.body.raw, options)) : null}
-                                                <Link style={{display: "flex", justifyContent: "center"}} to={`/store/${projectData.permalink}`}><Calltoaction title="" buttonText="Join this Journey" /></Link>
+                                                <Link style={{display: "flex", justifyContent: "center"}} to={`/store/${projectData.projectId}`}><Calltoaction title="" buttonText="Join this Journey" /></Link>
                                                 <Link to="/#portfolio"><FiArrowLeftCircle size={50} /></Link>
                                             </div>
                                         </div>
@@ -96,7 +96,6 @@ query ProjectQuery($name: String!) {
             id
             name
             title
-            permalink
             body {
               raw
             }
