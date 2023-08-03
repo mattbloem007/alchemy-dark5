@@ -7,9 +7,11 @@ class ImageGalleryComponent extends React.Component {
             <div>
                 <Carousel interval="500" transitionTime="500">
                 {this.props.images ? this.props.images.map(image => {
+                  let urlString = image.url.split("|")
+                  let url = urlString[0] + "%7C" + urlString[1]
                   return (
                     <div>
-                        <img src={image.url} />
+                        <img src={url} />
                         {/**<p className="legend">My Classic Still 1</p>*/}
                     </div>
                   )
