@@ -75,7 +75,7 @@ const CheckoutForm = ({
     shippingPostalZipCode: '',
     shippingCountry: 'ZA',
     shippingSubdivision: 'GP',
-    shippingOption: '',
+    shippingOption: {},
     shippingOptions: [],
     shippingCountries: {},
     shippingSubdivisions: {},
@@ -102,7 +102,7 @@ const CheckoutForm = ({
         shippingPostalZipCode: '',
         shippingCountry: '',
         shippingSubdivision: '',
-        shippingOption: '',
+        shippingOption: {},
         shippingOptions: [],
         shippingCountries: {},
         shippingSubdivisions: {},
@@ -163,7 +163,8 @@ const CheckoutForm = ({
 
   const handleShippingOptionChange = (e) => {
     const currentValue = e.target.value;
-    setValue({ ...value, [e.target.name]: e.target.value })
+    console.log("Option", JSON.parse(e.target.value))
+    setValue({ ...value, shippingOption: e.target.value })
   }
 
   const onSuccess = (reference) => {
@@ -316,10 +317,14 @@ const captureOrder = async (data) => {
 }
 
   if (Object.entries(cart).length !== 0) { //&& Object.entries(live).length !== 0) {
-    console.log("CART", shippingOptions)
+
+    let shipOpt;
+    if (value.shippingOption.length > 0) {
+       shipOpt = JSON.parse(value.shippingOption)
+    }
     let total = parseFloat(cart.subtotal.raw)
-    if(shippingOptions[0]) {
-      total = total + parseFloat(shippingOptions[0].price.raw)
+    if(shipOpt) {
+      total = total + parseFloat(shipOpt.price.raw)
     }
     componentProps = {
       email: value.email,
@@ -504,11 +509,11 @@ const captureOrder = async (data) => {
                     id="shippingOption"
                     onChange={handleShippingOptionChange}
                     >
-                    <option disabled>Select a shipping method</option>
+                    <option>Select a shipping method</option>
                     {
                       Object.entries(shippingOptions).length !== 0 && shippingOptions.map((method, index) => {
                         return (
-                          <option value={method.id} key={index}>{`${method.description} - ${method.price.formatted_with_code}` }</option>
+                          <option value={JSON.stringify(method)} key={index}>{`${method.description} - ${method.price.formatted_with_code}` }</option>
                         )
                       })
                     }
@@ -527,7 +532,7 @@ const captureOrder = async (data) => {
                     disabled={serverState.submitting}
                     {...componentProps}
                   />
-                  <div id="paypalbutton" style={{marginTop: "10px"}}><CircleSpinner size={30} loading={loading} /></div>
+                  {!isShipping && <div id="paypalbutton" style={{marginTop: "10px"}}><CircleSpinner size={30} loading={loading} /></div>}
                 </div>
               }
                 {serverState.status && (
