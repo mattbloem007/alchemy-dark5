@@ -330,7 +330,7 @@ const captureOrder = async (data) => {
       email: value.email,
       amount: total * 100 ,
       currency: "ZAR",
-      publicKey: "pk_test_4f0dddba5d054ad67f1c38a665e1fe95017a06a1", //"pk_live_b10691dc007bf4e394d92f0ad75f996e327736c6",//
+      publicKey: "pk_live_b10691dc007bf4e394d92f0ad75f996e327736c6", //"pk_test_4f0dddba5d054ad67f1c38a665e1fe95017a06a1",
       text: "Pay Now",
       onSuccess,
       onClose,
