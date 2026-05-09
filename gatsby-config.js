@@ -24,27 +24,6 @@ module.exports = {
   },
   plugins: [
     {
-      resolve: `gatsby-source-open-exchange-rates`,
-      options: {
-        appId: process.env.OPEN_EXCHANGE_RATES_APP_ID,
-        base: "ZAR"
-      }
-    },
-    {
-      resolve: `gatsby-plugin-paypal`,
-      options: {
-        clientId: process.env.PAY_PAL_CLIENT_ID,
-        vault: true // Optional
-      }
-    },
-    {
-      resolve: "@chec/gatsby-source-chec",
-      options: {
-        publicKey: process.env.NEXT_PUBLIC_CHEC_PUBLIC_KEY,
-        //downloadImageAssets: true,
-      },
-    },
-    {
       resolve: `gatsby-source-contentful`,
       options: {
         spaceId: process.env.CONTENTFUL_SPACE_ID || '',

@@ -1,141 +1,168 @@
-import React, {useEffect, useState } from 'react'
-import Layout from './components/layout'
-import commerce from './lib/Commerce';
-import { navigate } from "gatsby"
+import React, { useEffect, useState } from "react";
+import Layout from "./components/layout";
 
+const CART_STORAGE_KEY = "stripe_cart";
+
+const formatPrice = (amount, currency = "ZAR") =>
+  new Intl.NumberFormat("en-ZA", {
+    style: "currency",
+    currency
+  }).format(amount);
+
+const buildCart = (lineItems = []) => {
+  const subtotalRaw = lineItems.reduce(
+    (sum, item) => sum + Number(item.price.raw || 0) * Number(item.quantity || 0),
+    0
+  );
+  const currency = lineItems[0]?.price?.currency || "ZAR";
+  return {
+    id: "local-cart",
+    line_items: lineItems,
+    total_items: lineItems.reduce((sum, item) => sum + Number(item.quantity || 0), 0),
+    total_unique_items: lineItems.length,
+    subtotal: {
+      raw: subtotalRaw,
+      formatted_with_symbol: formatPrice(subtotalRaw, currency)
+    },
+    currency: { code: currency }
+  };
+};
 
 const Alchemy = (props) => {
-  const [cart, setCart] = useState({});
-  const [order, setOrder] = useState({});
-  const [variants, setVariants] = useState({product: "", variant: {}})
+  const [cart, setCart] = useState(buildCart([]));
   const [isCartVisible, setCartVisible] = useState(false);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [productsHas, setProductsHas] = useState([]);
+  const [variants] = useState({ product: "", variant: {} });
 
-//  const [product, setProduct] = useState({});
-  console.log("PROPS", props)
-  const fetchCart = () => {
-  commerce.cart.retrieve().then((cart) => {
-      setCart(cart);
-    }).catch((error) => {
-      console.log('There was an error fetching the cart', error);
-    });
-  }
-
-  const fetchVariants = (productId) => {
-  commerce.products.getVariants(productId).then((variant) => {
-      setVariants({product: productId, variant: variant});
-      console.log("Variants: ", variant)
-    }).catch((error) => {
-      console.log('There was an error fetching the variants', error);
-    });
-  }
+  const saveCart = (nextLineItems) => {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(nextLineItems));
+    }
+    setCart(buildCart(nextLineItems));
+  };
 
   const setCartVisibility = () => {
-    setCartVisible(!isCartVisible)
-  }
+    setCartVisible(!isCartVisible);
+  };
 
   const setOverlay = () => {
-    setIsOverlayOpen(!isOverlayOpen)
-  }
+    setIsOverlayOpen(!isOverlayOpen);
+  };
 
-  const returnProduct = (product) => {
-    console.log("returned", product)
-    return product;
-  }
+  const fetchProduct = () => {};
 
-  const fetchProduct = (productId) => {
-    commerce.products.retrieve(productId)
-    .then(product => setProductsHas(product.has))
-  }
-
-
-  const handleAddToCart = (has, productId, quantity, variantID) => {
-    commerce.cart.add(productId, quantity, variantID).then((item) => {
-      console.log("cart", item)
-      setProductsHas([...productsHas, has])
-      // let info;
-      // if(typeof window !== 'undefined') {
-      //   info = window.sessionStorage.getItem("productHas")
-      // }
-      let existingHas = JSON.parse(typeof window !== 'undefined' && window.sessionStorage.getItem("productHas"))
-      if (existingHas == null) {
-        existingHas = []
-      }
-      existingHas.push(has)
-      typeof window !== 'undefined' && window.sessionStorage.setItem("productHas", JSON.stringify(existingHas))
-      setCart(item);
-    }).catch((error) => {
-      console.error('There was an error adding the item to the cart', error);
-    });
-  }
+  const handleAddToCart = (product, quantity = 1) => {
+    if (!product?.id) {
+      return;
+    }
+    const existing = cart.line_items.find((item) => item.id === product.id);
+    let nextLineItems;
+    if (existing) {
+      nextLineItems = cart.line_items.map((item) =>
+        item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
+      );
+    } else {
+      nextLineItems = [
+        ...cart.line_items,
+        {
+          id: product.id,
+          product_id: product.id,
+          name: product.name,
+          image: { url: product.images?.[0] || "" },
+          quantity,
+          has: {
+            digital_delivery: product.metadata?.digital_delivery !== "false",
+            physical_delivery: product.metadata?.digital_delivery === "false"
+          },
+          price: {
+            raw: Number(product.price?.raw || 0),
+            currency: product.price?.currency || "ZAR",
+            formatted_with_symbol: product.price?.formatted_with_symbol || formatPrice(0)
+          }
+        }
+      ];
+    }
+    saveCart(
+      nextLineItems.map((item) => ({
+        ...item,
+        line_total: {
+          raw: Number(item.price.raw) * Number(item.quantity),
+          formatted_with_symbol: formatPrice(
+            Number(item.price.raw) * Number(item.quantity),
+            item.price.currency
+          )
+        }
+      }))
+    );
+  };
 
   const handleUpdateCartQty = (lineItemId, quantity) => {
-    commerce.cart.update(lineItemId, { quantity }).then((resp) => {
-      setCart(resp);
-    }).catch((error) => {
-      console.log('There was an error updating the cart items', error);
-    });
-  }
+    if (quantity <= 0) {
+      handleRemoveFromCart(lineItemId);
+      return;
+    }
+    const nextLineItems = cart.line_items.map((item) =>
+      item.id === lineItemId ? { ...item, quantity } : item
+    );
+    saveCart(
+      nextLineItems.map((item) => ({
+        ...item,
+        line_total: {
+          raw: Number(item.price.raw) * Number(item.quantity),
+          formatted_with_symbol: formatPrice(
+            Number(item.price.raw) * Number(item.quantity),
+            item.price.currency
+          )
+        }
+      }))
+    );
+  };
 
   const handleRemoveFromCart = (lineItemId) => {
-    commerce.cart.remove(lineItemId).then((resp) => {
-      setCart(resp);
-    }).catch((error) => {
-      console.error('There was an error removing the item from the cart', error);
-    });
-  }
+    const nextLineItems = cart.line_items.filter((item) => item.id !== lineItemId);
+    saveCart(nextLineItems);
+  };
 
   const handleEmptyCart = () => {
-    sessionStorage.clear();
-    commerce.cart.empty().then((resp) => {
-      setCart(resp);
-    }).catch((error) => {
-      console.error('There was an error emptying the cart', error);
-    });
-  }
-
-  const refreshCart = () => {
-    commerce.cart.refresh().then((newCart) => {
-      setCart(newCart);
-    }).catch((error) => {
-      console.log('There was an error refreshing your cart', error);
-    });
+    saveCart([]);
+    if (typeof window !== "undefined") {
+      window.sessionStorage.removeItem("productHas");
+    }
   };
-
-  const handleCaptureCheckout = (checkoutTokenId, newOrder) => {
-    console.log("NEW ORDER", newOrder, checkoutTokenId)
-    commerce.checkout.capture(checkoutTokenId, newOrder).then((ord) => {
-      // Save the order into state
-      console.log("ORDER", ord)
-      setOrder(ord);
-      // Clear the cart
-      refreshCart();
-      // Send the user to the receipt
-      navigate('/confirmation');
-      // Store the order in session storage so we can show it again if the
-      // user refreshes the page!
-      typeof window !== 'undefined' && window.sessionStorage.setItem('order_receipt', JSON.stringify(ord));
-    }).catch((error) => {
-      console.log('There was an error confirming your order', error);
-    });
-  };
-
-  // useEffect(() => {
-  // //  fetchProducts();
-  //   fetchCart();
-  // }, []);
 
   useEffect(() => {
-    let isMounted = true;
-    commerce.cart.retrieve().then((cart) => {
-        if (isMounted) setCart(cart);
-      }).catch((error) => {
-        console.log('There was an error fetching the cart', error);
-      });               // note mutable flag
-
-    return () => { isMounted = false }; // cleanup toggles value, if unmounted
+    if (typeof window === "undefined") {
+      return;
+    }
+    const saved = JSON.parse(window.localStorage.getItem(CART_STORAGE_KEY) || "[]");
+    const hydrated = saved.map((item) => ({
+      ...item,
+      line_total: {
+        raw: Number(item.price.raw) * Number(item.quantity),
+        formatted_with_symbol: formatPrice(
+          Number(item.price.raw) * Number(item.quantity),
+          item.price.currency
+        )
+      }
+    }));
+    setCart(buildCart(hydrated));
+    setProductsHas(
+      hydrated.map((item) => ({
+        digital_delivery: item.has?.digital_delivery !== false,
+        physical_delivery: item.has?.physical_delivery === true
+      }))
+    );
   }, []);
+
+  useEffect(() => {
+    setProductsHas(
+      (cart.line_items || []).map((item) => ({
+        digital_delivery: item.has?.digital_delivery !== false,
+        physical_delivery: item.has?.physical_delivery === true
+      }))
+    );
+  }, [cart]);
 
   const elementWithProps = React.Children.map(props.element, (child, i) =>
     React.cloneElement(child, {
@@ -144,13 +171,11 @@ const Alchemy = (props) => {
       onUpdateCartQty: handleUpdateCartQty,
       onRemoveFromCart: handleRemoveFromCart,
       onEmptyCart: handleEmptyCart,
-      onCaptureCheckout: handleCaptureCheckout,
       fetchProduct: fetchProduct,
       isCartVisible: isCartVisible,
       setCartVisible: setCartVisibility,
       isOverlayOpen: isOverlayOpen,
       setOverlay: setOverlay,
-      onFetchVariants: fetchVariants,
       variants: variants,
       productsHas: productsHas
     })
@@ -173,7 +198,7 @@ const Alchemy = (props) => {
           {elementWithProps}
         </Layout>
       </div>
-  )
-}
+  );
+};
 
-export default Alchemy
+export default Alchemy;

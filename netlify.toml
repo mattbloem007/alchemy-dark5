@@ -1,3 +1,8 @@
 [build.environment]
   YARN_VERSION = "1.22.17"
   NODE_ENV = "production"
+  NEXT_PUBLIC_CHEC_PUBLIC_KEY = "pk_47885dbdd0e55e008c1c4982d9e35fb2c99247830bdc9"
+  CONTENTFUL_SPACE_ID = "wzq2fvursmh7"
+  CONTENTFUL_HOST = "cdn.contentful.com"
+  CHEC_API_URL = "alchemyremember.me"
+  GATSBY_STRIPE_PUBLISHABLE_KEY = "pk_live_51TRFfxRgW4M1GHDZY8UTWqma03zWOvc4UuyNnldkEzXE0jxKDmTY6Zm1xFMWpYpfZym3B3qcUBIRlJd7rlDyTRhv00VdIg1bXY"

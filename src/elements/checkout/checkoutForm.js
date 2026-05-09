@@ -1,342 +1,165 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios'
+import React, { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import { PaystackButton } from "react-paystack"
-import { loadScript } from "@paypal/paypal-js";
-import commerce from '../../lib/Commerce';
+import { loadStripe } from "@stripe/stripe-js";
 import { CircleSpinner } from "react-spinners-kit";
 
 const CheckoutForm = ({
-  data,
-  firstName,
-  lastName,
-  email,
-  shippingName,
-  shippingStreet,
-  shippingCity,
-  shippingPostalZipCode,
   shippingCountries,
   shippingSubdivisions,
-  shippingOption,
   shippingOptions,
-  cardNum,
-  expMonth,
-  expYear,
-  ccv,
   fetchSubdivisions,
   fetchShippingOptions,
-  fetchProduct,
   checkoutToken,
-  sanitizedLineItems,
   cart,
-  productsHas,
-//  live,
-  onCaptureCheckout
+  productsHas
 }) => {
-    const { register, handleSubmit, formState: { errors }  } = useForm({
-		mode: "onBlur"
-	})
-    const [serverState, setServerState] = useState({
-		submitting: false,
-		status: null
-    });
-
-    const [loading, setLoading] = useState(true)
-    const [cartItems, setItems] = useState([])
-    const [isShipping, setShipping] = useState(false)
-    let componentProps = {}
-    let paypal;
-    let shipHas = JSON.parse(typeof window !== 'undefined' && window.sessionStorage.getItem("productHas"))
-    console.log("LOCAL Storage", shipHas)
-
-  useEffect(() => {
-    if (Object.keys(cart).length !== 0  && Object.keys(checkoutToken).length !== 0) {
-      console.log("SHIPPING?")
-      if (shipHas.find(x => x.digital_delivery === false)) {
-        console.log("there is shipping")
-        setShipping(true)
-      }
-      console.log("there is NO shipping")
-      handleCaptureCheckoutPayPal()
+  const parseJsonResponse = async (response) => {
+    const text = await response.text();
+    try {
+      return JSON.parse(text);
+    } catch (error) {
+      throw new Error(`Unexpected response from checkout endpoint (${response.status}).`);
     }
-  }, [checkoutToken])
+  };
 
-
-
-
-
-	const [value, setValue] = useState({
-    lastName: '',
-    email: '',
-    amount: '0.00',
-    shippingName: '',
-    shippingStreet: '',
-    shippingCity: '',
-    shippingPostalZipCode: '',
-    shippingCountry: 'ZA',
-    shippingSubdivision: 'GP',
-    shippingOption: {},
-    shippingOptions: [],
-    shippingCountries: {},
-    shippingSubdivisions: {},
-    cardNum: '',
-    expMonth: '',
-    expYear: '',
-    ccv: ''
-    });
-
-    const handleServerResponse = (ok, msg, form) => {
-		setServerState({
-			submitting: false,
-			status: { ok, msg }
-		});
-		if (ok) {
-			form.reset();
-			setValue({
-        lastName: '',
-        email: '',
-        amount: '0.00',
-        shippingName: '',
-        shippingStreet: '',
-        shippingCity: '',
-        shippingPostalZipCode: '',
-        shippingCountry: '',
-        shippingSubdivision: '',
-        shippingOption: {},
-        shippingOptions: [],
-        shippingCountries: {},
-        shippingSubdivisions: {},
-        cardNum: '',
-        expMonth: '',
-        expYear: '',
-        ccv: ''
-			})
-		}
-    };
-
-    useEffect(() => {
-      if (Object.keys(cart).length !== 0  && Object.keys(checkoutToken).length !== 0) {
-        console.log("SHIPPING?", shipHas)
-        let shipping = shipHas.find(x => x.digital_delivery === false)
-        console.log("SHIPPING?", shipping)
-        if (productsHas.find(x => x.digital_delivery === false)) {
-          console.log("there is shipping")
-          setShipping(true)
+  const createCheckoutSession = async (body) => {
+    const endpoints = [
+      "/.netlify/functions/create-stripe-checkout-session",
+      "/api/create-stripe-checkout-session"
+    ];
+    let lastError = null;
+    for (const endpoint of endpoints) {
+      try {
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+        const payload = await parseJsonResponse(response);
+        if (!response.ok || !payload.id) {
+          throw new Error(payload.error || "Could not create Stripe checkout session.");
         }
-        console.log("there is NO shipping")
+        return payload;
+      } catch (error) {
+        lastError = error;
       }
-    }, [value])
+    }
+    throw lastError || new Error("Could not create Stripe checkout session.");
+  };
 
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    mode: "onBlur"
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
-    const onSubmit = (data, e) => {
-		// const form = e.target;
-		// setServerState({ submitting: true });
-		// axios({
-		// 	method: "post",
-		// 	url: url,
-		// 	data
-		// })
-		// 	.then(res => {
-		// 		handleServerResponse(true, "Thanks! for being with us", form);
-		// 	})
-		// 	.catch(err => {
-		// 		handleServerResponse(false, err.response.data.error, form);
-		// 	});
-	}
+  const [value, setValue] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    shippingStreet: "",
+    shippingCity: "",
+    shippingPostalZipCode: "",
+    shippingCountry: "ZA",
+    shippingSubdivision: "GP",
+    shippingOption: ""
+  });
 
-  const isErrors = Object.keys(errors).length !== 0 && true;
-	const onChangeHandler = e => {
-		setValue({ ...value, [e.target.name]: e.target.value })
-	}
+  const stripePromise = useMemo(() => {
+    if (typeof window === "undefined") {
+      return null;
+    }
+    if (!process.env.GATSBY_STRIPE_PUBLISHABLE_KEY) {
+      return null;
+    }
+    return loadStripe(process.env.GATSBY_STRIPE_PUBLISHABLE_KEY);
+  }, []);
 
-  const handleShippingCountryChange = (e) => {
-    const currentValue = e.target.value;
-    setValue({ ...value, [e.target.name]: e.target.value })
+  const isShipping = useMemo(() => {
+    return Array.isArray(productsHas) && productsHas.some((item) => item?.digital_delivery === false);
+  }, [productsHas]);
+
+  const isErrors = Object.keys(errors).length !== 0;
+
+  const onChangeHandler = (event) => {
+    setValue({ ...value, [event.target.name]: event.target.value });
+  };
+
+  const handleShippingCountryChange = (event) => {
+    const currentValue = event.target.value;
+    setValue({ ...value, [event.target.name]: event.target.value });
     fetchSubdivisions(currentValue);
   };
 
-  const handleSubdivisionChange = (e) => {
-        const currentValue = e.target.value;
-        setValue({ ...value, [e.target.name]: e.target.value })
-        fetchShippingOptions(checkoutToken.id, value.shippingCountry, currentValue)
-  }
-
-  const handleShippingOptionChange = (e) => {
-    const currentValue = e.target.value;
-    console.log("Option", JSON.parse(e.target.value))
-    setValue({ ...value, shippingOption: e.target.value })
-  }
-
-  const onSuccess = (reference) => {
-
-    console.log("REF", reference)
-    handleCaptureCheckout(reference)
+  const handleSubdivisionChange = (event) => {
+    const currentValue = event.target.value;
+    setValue({ ...value, [event.target.name]: event.target.value });
+    fetchShippingOptions(checkoutToken.id, value.shippingCountry, currentValue);
   };
 
-  const onClose = () => {
-    console.log('closed')
-  }
-
-  const handleCaptureCheckout = (ref) => {
-    console.log("In handle checkout")
-    const orderData = {
-      line_items: sanitizedLineItems(cart.line_items),
-      customer: {
-        firstname: value.firstName,
-        lastname: value.lastName,
-        email: value.email,
-      },
-      shipping: {
-        name: value.firstName + " " + value.lastName,
-        street: value.shippingStreet,
-        town_city: value.shippingCity,
-        county_state: value.shippingSubdivision,
-        postal_zip_code: value.shippingPostalZipCode,
-        country: value.shippingCountry,
-      },
-      fulfillment: {
-        shipping_method: shippingOptions[0].id
-      },
-      payment: {
-        id: 'gway_zoBZa8LavyNOoP', // live gway_Y5eDARaA6K49o3
-        gateway: 'paystack',
-        paystack: {
-          reference: ref.reference
-        },
-        // card: {
-        //   number: value.cardNum,
-        //   expiry_month: value.expMonth,
-        //   expiry_year: value.expYear,
-        //   cvc: value.ccv,
-        //   postal_zip_code: value.shippingPostalZipCode,
-        // },
-      },
-    //  pay_what_you_want: '2222.00',
-    };
-    console.log(checkoutToken.id, "Order data", orderData)
-
-    onCaptureCheckout(checkoutToken.id, orderData);
+  const handleShippingOptionChange = (event) => {
+    setValue({ ...value, shippingOption: event.target.value });
   };
 
-  const handleCaptureCheckoutPayPal = async (ref) => {
+  const onSubmit = async () => {
+    if (!stripePromise) {
+      setSubmitError("Stripe is not configured. Add GATSBY_STRIPE_PUBLISHABLE_KEY.");
+      return;
+    }
+    if (!cart?.line_items?.length) {
+      setSubmitError("Your cart is empty.");
+      return;
+    }
 
-    const orderData = {
-      line_items: sanitizedLineItems(cart.line_items),
-      customer: {
-        firstname: value.firstName,
-        lastname: value.lastName,
-        email: value.email,
-      },
-      payment: {
-        gateway: 'paypal',
-        paypal: {
-          action: 'authorize',
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const selectedShippingOption = value.shippingOption
+        ? JSON.parse(value.shippingOption)
+        : null;
+
+      // Extract course info from first cart item's metadata
+      const firstItem = cart.line_items[0];
+      const courseId = firstItem?.metadata?.courseId || "";
+      const automationId = firstItem?.metadata?.automationId || "";
+
+      const origin = window.location.origin;
+      const payload = await createCheckoutSession({
+        cart,
+        customer: {
+          firstName: value.firstName,
+          lastName: value.lastName,
+          email: value.email
         },
-      },
-    };
+        courseId,
+        automationId,
+        shippingAddress: isShipping
+          ? {
+              street: value.shippingStreet,
+              city: value.shippingCity,
+              postalCode: value.shippingPostalZipCode,
+              subdivision: value.shippingSubdivision,
+              country: value.shippingCountry
+            }
+          : null,
+        shippingOption: selectedShippingOption,
+        successUrl: `${origin}/confirmation?checkout=success`,
+        cancelUrl: `${origin}/checkout?checkout=cancelled`
+      });
 
-    renderPaypalButton();
-  }
-
-  const renderPaypalButton = () => {
-
-    const filterCurrency = data.allOpenExchangeRates.nodes.filter(curr=>curr.currency=="ZAR");
-    let usdCurrency = parseFloat(cart.subtotal.raw) / filterCurrency[0].rate
-    console.log("usd value", filterCurrency[0].rate, cart.subtotal.raw)
-
-    loadScript({ "client-id": "AQgueuxjYVXkSyP6R47CpNuP8wsoy4sG2zjnQl0qZt1ZcsKOpVgE71ssvJ9nB970QE_OzVYFfdIwK0PT" })
-    .then((paypal) => {
-        paypal
-            .Buttons({
-              style: {
-                layout: 'horizontal',
-                color:  'gold',
-                shape:  'pill',
-                label:  'paypal'
-              },
-              createOrder: function(data, actions) {
-                // Set up the transaction
-
-                return actions.order.create({
-                  purchase_units: [{
-                    amount: {
-                      value: (usdCurrency.toFixed(2)).toString()
-                    }
-                  }]
-                });
-              },
-              onApprove: function(data, actions) {
-                // This function captures the funds from the transaction.
-                return actions.order.capture().then(function(details) {
-                  captureOrder(details)
-                });
-              }
-            })
-            .render("#paypalbutton")
-            .catch((error) => {
-                console.error("failed to render the PayPal Buttons", error);
-            });
-            setLoading(false)
-    })
-    .catch((error) => {
-        console.error("failed to load the PayPal JS SDK script", error);
-    });
-}
-
-const captureOrder = async (data) => {
-  try {
-    console.log("DATA", data)
-    const order = await commerce.checkout.capture(checkoutToken.id, {
-      customer: {
-        firstname: data.payer.name.given_name,
-        lastname: data.payer.name.surname,
-        email: data.payer.email_address,
-      },
-      payment: {
-        id: 'gway_9l6LJmxJE8Oyo1',
-        gateway: 'paypal',
-        paypal: {
-          action: 'capture',
-          payment_id: data.id,
-          payer_id: data.payer.payer_id,
-        },
-      },
-    })
-
-    // If we get here, the order has been successfully captured and the order detail is part of the `order` variable
-    console.log(order);
-    return;
-  } catch (response) {
-    // There was an issue capturing the order with Commerce.js
-    console.log(response);
-    alert(response.message);
-    return;
-  } finally {
-    // Any loading state can be removed here.
-  }
-}
-
-  if (Object.entries(cart).length !== 0) { //&& Object.entries(live).length !== 0) {
-
-    let shipOpt;
-    if (value.shippingOption.length > 0) {
-       shipOpt = JSON.parse(value.shippingOption)
+      // Use client-side redirect to Stripe Checkout session
+      // redirectToCheckout is no longer supported in newer versions of Stripe.js
+      if (payload.url) {
+        window.location.href = payload.url;
+      } else {
+        throw new Error("No checkout URL provided by server.");
+      }
+    } catch (error) {
+      setSubmitError(error.message || "Something went wrong while redirecting to Stripe.");
+      setIsSubmitting(false);
     }
-    let total = parseFloat(cart.subtotal.raw)
-    if(shipOpt) {
-      total = total + parseFloat(shipOpt.price.raw)
-    }
-    componentProps = {
-      email: value.email,
-      amount: total * 100 ,
-      currency: "ZAR",
-      publicKey: "pk_live_b10691dc007bf4e394d92f0ad75f996e327736c6", //"pk_test_4f0dddba5d054ad67f1c38a665e1fe95017a06a1",
-      text: "Pay Now",
-      onSuccess,
-      onClose,
-    }
-
-  }
+  };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -351,7 +174,7 @@ const captureOrder = async (data) => {
                 <input
                     type="text"
                     id="firstname"
-                    value={firstName}
+                    value={value.firstName}
                     {...register('firstName', {
                       onChange: (e) => {onChangeHandler(e)},
                       required: 'First Name Required'
@@ -364,7 +187,7 @@ const captureOrder = async (data) => {
                 <input
                     type="text"
                     id="lastname"
-                    value={lastName}
+                    value={value.lastName}
                     {...register('lastName', {
                       onChange: (e) => {onChangeHandler(e)},
                       required: 'Last Name Required'
@@ -379,7 +202,7 @@ const captureOrder = async (data) => {
                     type="email"
                     name="email"
                     id="email"
-                    value={email}
+                    value={value.email}
                     {...register('email', {
                       onChange: (e) => {onChangeHandler(e)},
                       required: 'Email Required',
@@ -406,7 +229,7 @@ const captureOrder = async (data) => {
                   type="text"
                   name="shippingStreet"
                   id="shippingStreet"
-                  value={shippingStreet}
+                    value={value.shippingStreet}
                   {...register('shippingStreet', {
                     onChange: (e) => {onChangeHandler(e)},
                     required: 'Shipping street Required',
@@ -421,7 +244,7 @@ const captureOrder = async (data) => {
                     type="text"
                     name="shippingCity"
                     id="shippingCity"
-                    value={shippingCity}
+                    value={value.shippingCity}
                     {...register('shippingCity', {
                       onChange: (e) => {onChangeHandler(e)},
                       required: 'City Required',
@@ -436,7 +259,7 @@ const captureOrder = async (data) => {
                     type="text"
                     name="shippingPostalZipCode"
                     id="shippingPostalZipCode"
-                    value={shippingPostalZipCode}
+                    value={value.shippingPostalZipCode}
                     {...register('shippingPostalZipCode', {
                       onChange: (e) => {onChangeHandler(e)},
                       required: 'Zip Code Required',
@@ -525,26 +348,16 @@ const captureOrder = async (data) => {
 
 
             <div className="form-submit">
-              {Object.entries(cart).length == 0 ? <CircleSpinner size={30} loading={loading} /> : null}
-              {Object.entries(componentProps).length !== 0 &&
-                <div>
-                  <PaystackButton className="rn-button" type="submit"
-                    disabled={serverState.submitting}
-                    {...componentProps}
-                  />
-                  {!isShipping && <div id="paypalbutton" style={{marginTop: "10px"}}><CircleSpinner size={30} loading={loading} /></div>}
-                </div>
-              }
-                {serverState.status && (
-                    <p className={`form-output ${!serverState.status.ok ? "errorMsg" : "success"}`}>
-                        {serverState.status.msg}
-                    </p>
-                )}
+              {Object.entries(cart).length === 0 ? <CircleSpinner size={30} loading={true} /> : null}
+              {Object.entries(cart).length !== 0 && (
+                <button className="rn-button" type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Redirecting to Stripe..." : "Continue to Stripe Checkout"}
+                </button>
+              )}
+              {submitError && <p className="form-output errorMsg">{submitError}</p>}
             </div>
         </form>
-    )
-}
-
-
+    );
+};
 
 export default CheckoutForm;

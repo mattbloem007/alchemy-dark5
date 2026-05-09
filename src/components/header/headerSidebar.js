@@ -26,17 +26,17 @@ const HeaderNoSidebar = (props) => {
         }
     `);
 
-  //  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
-    let {
-      cart,
-      onUpdateCartQty,
-      onRemoveFromCart,
-      onEmptyCart,
-      isCartVisible,
-      setCartVisible,
-      isOverlayOpen,
-      setOverlay
-    } = props
+    const [isOverlayOpen, setOverlay] = useState(false);
+    // let {
+    //   cart,
+    //   onUpdateCartQty,
+    //   onRemoveFromCart,
+    //   onEmptyCart,
+    //   isCartVisible,
+    //   setCartVisible,
+    //   isOverlayOpen,
+    //   setOverlay
+    // } = props
 
 
 
@@ -139,7 +139,7 @@ const HeaderNoSidebar = (props) => {
                                 </a>
                             </li>
                             <li>
-                            {cart && Object.entries(cart).length == 0 ?
+                            {/**cart && Object.entries(cart).length == 0 ?
                               <CircleSpinner size={30} loading={true} />
                               :
                               <CartNav
@@ -153,7 +153,7 @@ const HeaderNoSidebar = (props) => {
                                 isOverlayOpen={isOverlayOpen}
                                 setOverlay={setOverlay}
                                 />
-                              }
+                              */}
                             </li>
                         </Scrollspy>
                     </div>

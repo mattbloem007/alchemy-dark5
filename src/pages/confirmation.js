@@ -1,14 +1,17 @@
-import React from 'react';
-import { useStaticQuery, graphql } from "gatsby";
-import Layout from "../components/layout";
-import { FaShoppingBag, } from "react-icons/fa";
+import React, { useEffect } from "react";
 
 
-const Confirmation = (props, {data}) => {
+const Confirmation = (props) => {
+    useEffect(() => {
+        if (typeof window === "undefined") {
+            return;
+        }
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("checkout") === "success" && typeof props.onEmptyCart === "function") {
+            props.onEmptyCart();
+        }
+    }, [props]);
 
-    let orderReceipt = typeof window !== 'undefined' && window.sessionStorage.getItem('order_receipt')
-    let order = orderReceipt ? JSON.parse(orderReceipt) : {}
-    console.log("order", order)
     return (
         <>
         <div className="rn-post-list-page rn-section-gap bg-color-white">
@@ -30,10 +33,10 @@ const Confirmation = (props, {data}) => {
                         <div className="row">
                             <div className="col-lg-12">
                                 <div className="inner">
-                                    <h1 className="theme-color">Order Confirmed</h1>
-                                    <h4>Thank you for your purchase, {order.customer && order.customer.firstname} {order.customer && order.customer.lastname}!</h4>
-                                    <span>Order ref:</span> {order.customer_reference && order.customer_reference}
-                                    <p>Please check your email from The Alchemy of Remembrance for your receipt and Download Link. (Also check spam if you don't see it in your email box)</p>
+                                    <h1 className="theme-color">Payment Confirmed</h1>
+                                    <h4>Thank you for your purchase.</h4>
+                                    <p>Your payment was processed through Stripe and your cart has been cleared.</p>
+                                    <p>Please check your email for the Stripe receipt and any delivery details.</p>
                                     <br/>
                                     <br/>
                                     <a className="rn-button" href="/">Go Back</a>

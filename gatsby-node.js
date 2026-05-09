@@ -2,7 +2,7 @@
 const { slugify } = require('./src/utils/utilityFunctions');
 const path = require('path');
 const _ = require('lodash');
-const {createRemoteFileNode} = require('gatsby-source-filesystem');
+const fetch = require('node-fetch');
 
 
 exports.onCreateNode = async ({node , actions, store, createNodeId, cache }) => {
@@ -32,32 +32,9 @@ exports.onCreateNode = async ({node , actions, store, createNodeId, cache }) => 
         });
     }
 
-    if (node.internal.type !== "ChecProduct") {
-      return
-    }
-
-    // download image and create a File node
-    // with gatsby-transformer-sharp and gatsby-plugin-sharp
-    // that node will become an ImageSharp
-    let urlString = node.image.url.split("|")
-    let url = urlString[0] + "%7C" + urlString[1]
-    const fileNode = await createRemoteFileNode({
-      url: url,
-      store,
-      cache,
-      createNode,
-      createNodeId,
-    })
-
-    if (fileNode) {
-      // link File node to DogImage node
-      // at field image
-      node.localFile___NODE = fileNode.id
-    }
-
 }
 
-exports.createPages = ({actions, graphql}) => {
+exports.createPages = async ({actions, graphql}) => {
     const { createPage } = actions;
     const templates =  {
         projectDetails: path.resolve('src/templates/project-details.js'),
@@ -65,7 +42,7 @@ exports.createPages = ({actions, graphql}) => {
         categoryPost: path.resolve('src/templates/category-post.js'),
         tagPost: path.resolve('src/templates/tag-template.js'),
         authorPage: path.resolve('src/templates/archive.js'),
-        productPage: path.resolve('src/templates/product.js'),
+        //productPage: path.resolve('src/templates/product.js'),
     }
 
     return graphql(`
@@ -77,20 +54,6 @@ exports.createPages = ({actions, graphql}) => {
               }
             }
           }
-
-            allChecProduct {
-              edges {
-                node {
-                  id
-                  name
-                  permalink
-                  image {
-                    url
-                  }
-                }
-              }
-            }
-
 
             allMarkdownRemark {
                 edges {
@@ -112,12 +75,10 @@ exports.createPages = ({actions, graphql}) => {
 
 
         }
-    `).then( res => {
+    `).then( async res => {
         if (res.errors) return Promise.reject(res.errors)
         const project = res.data.allContentfulProjects.edges
         const posts = res.data.allMarkdownRemark.edges
-        const products = res.data.allChecProduct.edges
-
          // Create Project Page
          project.forEach(({ node }) => {
            console.log("project", node.name)
@@ -217,19 +178,157 @@ exports.createPages = ({actions, graphql}) => {
         // End Create Authors Page
 
         // Product Page
+        // Fetch Stripe products and Contentful descriptions at build time
+        const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+        const contentfulSpaceId = process.env.CONTENTFUL_SPACE_ID;
+        const contentfulAccessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
 
-        products.forEach(product => {
-          let urlString = product.node.image.url.split("|")
-          let url = urlString[0] + "%7C" + urlString[1]
-            createPage({
-                path: `/store/${product.node.permalink}`,
-                component: templates.productPage,
-                context: {
-                    id: product.node.id,
-                    url,
+        if (stripeSecretKey && contentfulSpaceId && contentfulAccessToken) {
+          try {
+            const Stripe = require("stripe");
+            const stripe = new Stripe(stripeSecretKey);
+            
+            // Fetch all Stripe products
+            const stripeResponse = await stripe.products.list({
+              active: true,
+              limit: 100,
+              expand: ["data.default_price"]
+            });
+
+            // Create a page for each product
+            for (const stripeProduct of stripeResponse.data) {
+              // Query Contentful for extended description
+              let contentfulData = null;
+              try {
+                const contentfulQuery = `
+                  query {
+                    projectsCollection(where: { name: "${stripeProduct.id}" }, limit: 1) {
+                      items {
+                        name
+                        body {
+                          json
+                        }
+                      }
+                    }
+                  }
+                `;
+
+                const contentfulResponse = await fetch(
+                  `https://graphql.contentful.com/content/v1/spaces/${contentfulSpaceId}`,
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${contentfulAccessToken}`,
+                    },
+                    body: JSON.stringify({ query: contentfulQuery }),
+                  }
+                );
+
+                const contentfulDataResponse = await contentfulResponse.json();
+                console.log(`Full Contentful response for ${stripeProduct.id}:`, JSON.stringify(contentfulDataResponse, null, 2));
+                console.log(`Checking data.projectsCollection:`, contentfulDataResponse.data?.projectsCollection);
+                console.log(`Checking items:`, contentfulDataResponse.data?.projectsCollection?.items);
+                contentfulData = contentfulDataResponse.data?.projectsCollection?.items?.[0] || null;
+                if (!contentfulData) {
+                  console.warn(`No Contentful data found for Stripe product ${stripeProduct.id}`);
+                  console.warn(`Available data structure:`, Object.keys(contentfulDataResponse.data || {}));
                 }
-            })
-        })
+              } catch (err) {
+                console.error(`Failed to fetch Contentful data for product ${stripeProduct.id}:`, err);
+              }
+
+              const defaultPrice = stripeProduct.default_price || null;
+              const amount = defaultPrice?.unit_amount || 0;
+              const currency = (defaultPrice?.currency || "zar").toUpperCase();
+
+              createPage({
+                path: `/store/${stripeProduct.id}`,
+                component: path.resolve("src/templates/store-product.js"),
+                context: {
+                  stripeProduct: {
+                    id: stripeProduct.id,
+                    name: stripeProduct.name,
+                    description: stripeProduct.description || "",
+                    images: Array.isArray(stripeProduct.images) ? stripeProduct.images : [],
+                    metadata: stripeProduct.metadata || {},
+                    price: {
+                      id: defaultPrice?.id || null,
+                      raw: amount / 100,
+                      unit_amount: amount,
+                      currency,
+                      formatted_with_symbol: new Intl.NumberFormat("en-ZA", {
+                        style: "currency",
+                        currency
+                      }).format(amount / 100)
+                    }
+                  },
+                  contentfulProduct: contentfulData
+                }
+              });
+            }
+          } catch (err) {
+            console.error("Failed to create product pages:", err);
+          }
+
+          // Create offerings page with products list at build time
+          try {
+            const Stripe = require("stripe");
+            const stripe = new Stripe(stripeSecretKey);
+            
+            // Fetch all Stripe products for offerings page
+            const offeringsResponse = await stripe.products.list({
+              active: true,
+              limit: 100,
+              expand: ["data.default_price"]
+            });
+
+            const products = offeringsResponse.data.map((product) => {
+              const defaultPrice = product.default_price || null;
+              const amount = defaultPrice?.unit_amount || 0;
+              const currency = (defaultPrice?.currency || "zar").toUpperCase();
+
+              return {
+                id: product.id,
+                name: product.name,
+                description: product.description || "",
+                images: Array.isArray(product.images) ? product.images : [],
+                metadata: product.metadata || {},
+                price: {
+                  id: defaultPrice?.id || null,
+                  raw: amount / 100,
+                  unit_amount: amount,
+                  currency,
+                  formatted_with_symbol: new Intl.NumberFormat("en-ZA", {
+                    style: "currency",
+                    currency
+                  }).format(amount / 100)
+                }
+              };
+            });
+
+            // Update offerings page with products data
+            createPage({
+              path: "/offerings",
+              component: path.resolve("src/templates/offerings.js"),
+              context: {
+                products
+              }
+            });
+          } catch (err) {
+            console.error("Failed to create offerings page:", err);
+            // Still create the page without products as fallback
+            createPage({
+              path: "/offerings",
+              component: path.resolve("src/pages/offerings.js"),
+              context: {
+                products: [],
+                error: "Failed to load products"
+              }
+            });
+          }
+        }
+
 
 
 

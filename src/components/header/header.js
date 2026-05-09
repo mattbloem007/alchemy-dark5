@@ -10,7 +10,8 @@ import { CircleSpinner } from "react-spinners-kit";
 // Start Header Area
 const Header = (props) => {
 
-    let {cart, onUpdateCartQty, onRemoveFromCart, onEmptyCart, isCartVisible, setCartVisible} = props
+  //  let {cart, onUpdateCartQty, onRemoveFromCart, onEmptyCart, isCartVisible, setCartVisible} = props
+  let {cart, onUpdateCartQty, onRemoveFromCart, onEmptyCart, isCartVisible, setCartVisible, isOverlayOpen, setOverlay} = props
 
     const headerQuery = useStaticQuery(graphql`
         query headerQuery {
@@ -112,19 +113,17 @@ const Header = (props) => {
                                             </Link>
                                         </li>
                                         <li>
-                                        {cart && Object.entries(cart).length == 0 ?
-                                          <CircleSpinner size={30} loading={true} />
-                                          :
-                                          <CartNav
-                                            cart={cart}
-                                            onUpdateCartQty={onUpdateCartQty}
-                                            onRemoveFromCart={onRemoveFromCart}
-                                            onEmptyCart={onEmptyCart}
-                                            scroll={scroll}
-                                            isCartVisible={isCartVisible}
-                                            setCartVisible={setCartVisible}
-                                            />
-                                             }
+                                        <CartNav
+                                          cart={cart}
+                                          onUpdateCartQty={onUpdateCartQty}
+                                          onRemoveFromCart={onRemoveFromCart}
+                                          onEmptyCart={onEmptyCart}
+                                          scroll={scroll}
+                                          isCartVisible={isCartVisible}
+                                          setCartVisible={setCartVisible}
+                                          isOverlayOpen={isOverlayOpen}
+                                          setOverlay={setOverlay}
+                                          />
                                         </li>
 
                                     </Scrollspy>
