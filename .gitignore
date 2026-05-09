@@ -8,3 +8,8 @@ yarn.lock
 # Build directory
 /public
 .DS_Store
+
+# Environment variables with secrets
+.env
+.env.local
+.env.*.local

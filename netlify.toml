@@ -6,3 +6,6 @@
   CONTENTFUL_HOST = "cdn.contentful.com"
   CHEC_API_URL = "alchemyremember.me"
   GATSBY_STRIPE_PUBLISHABLE_KEY = "pk_live_51TRFfxRgW4M1GHDZY8UTWqma03zWOvc4UuyNnldkEzXE0jxKDmTY6Zm1xFMWpYpfZym3B3qcUBIRlJd7rlDyTRhv00VdIg1bXY"
+
+# IMPORTANT: Set these secrets in Netlify UI instead (Settings > Build & Deploy > Environment)
+# DO NOT add secret values here:
