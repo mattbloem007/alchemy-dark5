@@ -50,7 +50,8 @@ exports.createPages = async ({actions, graphql}) => {
           allContentfulProjects {
             edges {
               node {
-                name
+                permalink
+                title
               }
             }
           }
@@ -81,13 +82,18 @@ exports.createPages = async ({actions, graphql}) => {
         const posts = res.data.allMarkdownRemark.edges
          // Create Project Page
          project.forEach(({ node }) => {
-           console.log("project", node.name)
+          const projectSlugSource = node.permalink || node.title || '';
+          if (!projectSlugSource) {
+            return;
+          }
+
+          const projectSlug = slugify(projectSlugSource);
+          console.log("project", projectSlug)
             createPage({
-                // path: node.fields.slug,
-                path: `project/${slugify(node.name)}`,
+            path: `project/${projectSlug}`,
                 component: templates.projectDetails,
                 context: {
-                    name: node.name
+              permalink: node.permalink
                 }
             })
         })
@@ -202,9 +208,11 @@ exports.createPages = async ({actions, graphql}) => {
               try {
                 const contentfulQuery = `
                   query {
-                    projectsCollection(where: { name: "${stripeProduct.id}" }, limit: 1) {
+                    projectsCollection(where: { projectId: "${stripeProduct.id}" }, limit: 1) {
                       items {
-                        name
+                        permalink
+                        title
+                        projectId
                         body {
                           json
                         }

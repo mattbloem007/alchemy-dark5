@@ -44,14 +44,14 @@ const StoreProductPage = (props) => {
   };
 
   const mainContentStyle = {
-    paddingTop: "130px"
+    paddingTop: "180px"
   };
 
   // Mobile adjustments
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   if (isMobile) {
     stickyBarStyle.padding = "8px 0";
-    mainContentStyle.paddingTop = "220px";
+    mainContentStyle.paddingTop = "270px";
   }
 
   return (
@@ -188,6 +188,24 @@ const StoreProductPage = (props) => {
                   {stripeProduct.description && (
                     <p style={{ marginTop: "12px", marginBottom: "24px" }}>{stripeProduct.description}</p>
                   )}
+                  <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginBottom: "10px" }}>
+                    <button
+                      onClick={handleAddToCart}
+                      className="rn-button"
+                      aria-label="Add product to cart"
+                      style={{ padding: "0 24px", height: "44px", lineHeight: "42px" }}
+                    >
+                      <span>Add to Cart</span>
+                    </button>
+                    <button
+                      onClick={handleBuyNow}
+                      className="rn-button"
+                      aria-label="Buy now and proceed to checkout"
+                      style={{ padding: "0 24px", height: "44px", lineHeight: "42px" }}
+                    >
+                      <span>Buy Now</span>
+                    </button>
+                  </div>
                 </div>
 
                 {/* Product Description from Contentful */}

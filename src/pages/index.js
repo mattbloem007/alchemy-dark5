@@ -1,27 +1,24 @@
 import React from "react";
-import Layout from "../components/layout";
 import SEO from "../components/seo";
 import Banner from "../components/homedefault/banner";
 import About from "../components/homedefault/about";
+import Philosophy from "../components/homedefault/philosophy";
+import VeeraSection from "../components/homedefault/veeraSection";
 import Project from "../components/homedefault/project";
-import Testimonial from "../components/homedefault/testimonial";
-import Service from "../components/homedefault/service";
-import Brand from "../components/homedefault/brand";
 import BlogPost from "../components/blogPost";
 import Contact from "../elements/contact/contact";
 
-const IndexPage = (props) => {
-console.log("index props", props)
+const IndexPage = () => {
 return(
   <>
-    <SEO title="Cacao Ceremony" description="Searching for a New Way to Bring Extra Energy into Your Life?" />
+    <SEO title="Nervous System Restoration & Herbal Wellbeing" description="Grounded guidance for nervous system restoration, herbal wellbeing, embodied living, and sustainable daily ritual." />
     <Banner />
     <About />
-    <Service />
     <div className="portfolio-id" id="portfolio">
       <Project />
-      <Testimonial />
     </div>
+    <Philosophy />
+    <VeeraSection />
     <BlogPost />
     <Contact />
   </>

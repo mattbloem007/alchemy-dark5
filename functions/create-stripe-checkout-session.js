@@ -3,9 +3,28 @@ const Stripe = require("stripe");
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 
 exports.handler = async (event) => {
+  if (event.httpMethod === "OPTIONS") {
+    return {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "http://localhost:8000",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+      body: "",
+    };
+  }
+
+  const headers = {
+    "Access-Control-Allow-Origin": "http://localhost:8000",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
+
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
+      headers,
       body: JSON.stringify({ error: "Method not allowed" }),
     };
   }
@@ -13,6 +32,7 @@ exports.handler = async (event) => {
   if (!stripeSecretKey) {
     return {
       statusCode: 500,
+      headers,
       body: JSON.stringify({ error: "Missing STRIPE_SECRET_KEY" }),
     };
   }
@@ -24,6 +44,7 @@ exports.handler = async (event) => {
     if (!cart || !Array.isArray(cart.line_items) || cart.line_items.length === 0) {
       return {
         statusCode: 400,
+        headers,
         body: JSON.stringify({ error: "Cart is empty or invalid" }),
       };
     }
@@ -77,11 +98,13 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
+      headers,
       body: JSON.stringify({ id: session.id, url: session.url }),
     };
   } catch (error) {
     return {
       statusCode: 500,
+      headers,
       body: JSON.stringify({ error: error.message || "Stripe session failed" }),
     };
   }

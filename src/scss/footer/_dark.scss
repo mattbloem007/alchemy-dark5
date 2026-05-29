@@ -37,7 +37,7 @@
     }
 
     p {
-        color: #bbb;
+        color: #1f1f1f;
     }
 
     .bg-color-grey {
@@ -151,12 +151,12 @@
 }
 
 .active-dark .tag-list span {
-    color: #fff;
+    color: #1f1f1f;
 }
 
 .active-dark .tags-cloud a {
     border: 1px solid #121212;
-    color: #ddd;
+    color: #1f1f1f;
 }
 
 .active-dark .about-style .content .title-wrap {
@@ -197,9 +197,6 @@
     color: #fff;
 }
 
-.active-dark .content-block .post-content .read-more a::before {
-    background-color: #ffffff;
-}
 
 .active-dark .form-group input,
 .active-dark .form-group textarea {
@@ -222,11 +219,6 @@
 
 .active-dark .content-block .post-content .title:hover {
     color: #ffffff;
-}
-
-.active-dark .content-block .post-content span,
-.active-dark .content-block .post-content .author-name {
-    color: #fff;
 }
 
 

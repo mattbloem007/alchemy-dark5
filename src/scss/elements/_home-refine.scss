@@ -1,0 +1,383 @@
+/*----------------------
+    Home Refinement
+-----------------------*/
+
+:root {
+    --color-primary: #5f4223;
+    --color-heading: #121212;
+    --color-body: #1f1f1f;
+}
+
+body {
+    background: radial-gradient(circle at 18% 0%, #f8f5ea 0%, #f3f0e4 42%, #efece1 100%);
+}
+
+.section-tone-light {
+    background: #f6f2e8;
+}
+
+.section-tone-dark {
+    background: linear-gradient(180deg, #171513 0%, #211d19 100%);
+    position: relative;
+}
+
+.section-tone-dark .section-title .title,
+.section-tone-dark h1,
+.section-tone-dark h2,
+.section-tone-dark h3,
+.section-tone-dark h4,
+.section-tone-dark h5,
+.section-tone-dark h6,
+.section-tone-dark .title_holder,
+.section-tone-dark .category,
+.section-tone-dark .projectinfo,
+.section-tone-dark .blog-meta,
+.section-tone-dark .blog-meta span,
+.section-tone-dark .description,
+.section-tone-dark p,
+.section-tone-dark li,
+.section-tone-dark span {
+    color: #f0e8dc !important;
+}
+
+.section-tone-dark .section-title .title span.bg {
+    opacity: 0.14;
+    -webkit-text-stroke: 1px #f0e8dc;
+}
+
+.section-tone-dark .content-block {
+    background: #29231e;
+    border-color: #3e362e;
+}
+
+.section-tone-dark .offering-card {
+    background: #352b22;
+    border-color: #514336;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.26);
+}
+
+.section-tone-dark .offering-card .category,
+.section-tone-dark .offering-card .title a,
+.section-tone-dark .content-block .title,
+.section-tone-dark .content-block .description,
+.section-tone-dark .content-block .blog-meta span {
+    color: #f0e8dc !important;
+}
+
+.section-tone-dark .essay-categories span {
+    background: #312920;
+    border-color: #4b4035;
+    color: #f0e8dc !important;
+}
+
+.section-tone-dark .rn-button.secondary {
+    color: #f0e8dc !important;
+    border-color: #c8b39a;
+}
+
+.bg-color-grey {
+    background-color: #f2efe4 !important;
+}
+
+.bg-color-white {
+    background-color: #f8f7f1 !important;
+}
+
+/* High-contrast text system for cream sections */
+.bg-color-grey,
+.bg-color-white {
+    color: #1e1e1e;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .section-title .title,
+    .title_holder {
+        color: #111111 !important;
+    }
+
+    p,
+    .description,
+    .projectinfo,
+    .subtitle,
+    .category,
+    .blog-meta,
+    .blog-meta span,
+    .read-more a,
+    li,
+    span {
+        color: #1f1f1f;
+    }
+}
+
+.bg-color-grey .essay-categories span,
+.bg-color-white .essay-categories span {
+    color: #2c1e12 !important;
+    border-color: #cfc5b2;
+    background: #ece8dd;
+}
+
+.bg-color-grey .rn-button.secondary,
+.bg-color-white .rn-button.secondary {
+    color: #1f1f1f !important;
+    border-color: #4f4f4f;
+}
+
+.rb-about-area .description,
+.rb-about-area .subtitle,
+.rn-project-details-area .content-left p,
+.rn-project-details-area .content-left .projectinfo,
+.rn-project-details-area .content-left .list_holder li span.icon {
+    color: #1f1f1f !important;
+}
+
+.rb-about-area .section-title .title,
+.rn-project-details-area .content-left h3,
+.rn-project-details-area .title_holder {
+    color: #111111 !important;
+}
+
+.rn-philosophy-area {
+    .philosophy-title {
+        margin-bottom: 16px;
+
+        .title {
+            color: #111111;
+        }
+    }
+
+    .philosophy-copy {
+        max-width: 780px;
+        margin: 0 auto;
+        padding: 0 1%;
+
+        .description {
+            color: #1f1f1f;
+            font-size: 17px;
+            line-height: 1.9;
+            margin-bottom: 10px;
+        }
+    }
+}
+
+.rn-veera-area {
+    .veera-title {
+        margin-bottom: 24px;
+
+        .title {
+            color: #111111;
+        }
+    }
+
+    .veera-copy {
+        text-align: center;
+
+        .description {
+            color: #1f1f1f;
+            font-size: 17px;
+            line-height: 1.9;
+            margin-bottom: 10px;
+            max-width: 780px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+
+    .veera-action {
+        display: flex;
+        justify-content: center;
+
+        @media #{$md-layout} {
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        @media #{$sm-layout} {
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .rn-button {
+            background: #6e512d;
+            border-color: #6e512d;
+
+            &:hover {
+                background: #584126;
+                border-color: #584126;
+            }
+        }
+    }
+}
+
+.rn-contact-area {
+    .info {
+        p {
+            color: #1f1f1f;
+            font-size: 16px;
+            line-height: 1.9;
+        }
+    }
+}
+
+.section-title.mb--40,
+.section-title.mb--40 * {
+    text-align: center;
+}
+
+.section-title.mb--40 .description {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.section-title.mb--40 .essay-categories {
+    justify-content: center;
+}
+
+/* Blog page header contrast fixes */
+.active-dark .rn-post-list-page .page-top .title_holder,
+.active-dark .rn-category-post .page-top .title_holder,
+.active-dark .rn-tag-post-area .page-top .title_holder,
+.active-dark .rn-project-details-area .page-top .title_holder,
+.active-dark .blog-details-wrapper .post-single-title .post-title {
+    color: #111111 !important;
+    border-bottom-color: #cfc5b2 !important;
+}
+
+.active-dark .rn-post-list-page .breadcrumbs li,
+.active-dark .rn-category-post .breadcrumbs li,
+.active-dark .rn-tag-post-area .breadcrumbs li,
+.active-dark .rn-project-details-area .breadcrumbs li,
+.active-dark .blog-details-wrapper .breadcrumbs li {
+    color: #1f1f1f !important;
+}
+
+.active-dark .rn-post-list-page .breadcrumbs li.active,
+.active-dark .rn-category-post .breadcrumbs li.active,
+.active-dark .rn-tag-post-area .breadcrumbs li.active,
+.active-dark .rn-project-details-area .breadcrumbs li.active,
+.active-dark .blog-details-wrapper .breadcrumbs li.active,
+.active-dark .rn-post-list-page .breadcrumbs li a,
+.active-dark .rn-category-post .breadcrumbs li a,
+.active-dark .rn-tag-post-area .breadcrumbs li a,
+.active-dark .rn-project-details-area .breadcrumbs li a,
+.active-dark .blog-details-wrapper .breadcrumbs li a,
+.active-dark .rn-post-list-page .theme-color,
+.active-dark .rn-category-post .theme-color,
+.active-dark .rn-tag-post-area .theme-color,
+.active-dark .rn-project-details-area .theme-color,
+.active-dark .blog-details-wrapper .theme-color {
+    color: #3b2a1b !important;
+}
+
+/* Keep desktop nav readable at top on blog pages before scroll state kicks in */
+.active-dark:has(.rn-post-list-page .page-top) .rn-header.header-default.header-transparent:not(.scrolled) ul.mainmenuwrapper li a .hover-item span::before,
+.active-dark:has(.rn-post-list-page .page-top) .rn-header.header-default.header-transparent:not(.scrolled) ul.mainmenuwrapper li a .hover-item span::after,
+.active-dark:has(.rn-category-post) .rn-header.header-default.header-transparent:not(.scrolled) ul.mainmenuwrapper li a .hover-item span::before,
+.active-dark:has(.rn-category-post) .rn-header.header-default.header-transparent:not(.scrolled) ul.mainmenuwrapper li a .hover-item span::after,
+.active-dark:has(.rn-tag-post-area .page-top) .rn-header.header-default.header-transparent:not(.scrolled) ul.mainmenuwrapper li a .hover-item span::before,
+.active-dark:has(.rn-tag-post-area .page-top) .rn-header.header-default.header-transparent:not(.scrolled) ul.mainmenuwrapper li a .hover-item span::after,
+.active-dark:has(.rn-project-details-area .page-top) .rn-header.header-default.header-transparent:not(.scrolled) ul.mainmenuwrapper li a .hover-item span::before,
+.active-dark:has(.rn-project-details-area .page-top) .rn-header.header-default.header-transparent:not(.scrolled) ul.mainmenuwrapper li a .hover-item span::after,
+.active-dark:has(.blog-details-wrapper .post-single-title) .rn-header.header-default.header-transparent:not(.scrolled) ul.mainmenuwrapper li a .hover-item span::before,
+.active-dark:has(.blog-details-wrapper .post-single-title) .rn-header.header-default.header-transparent:not(.scrolled) ul.mainmenuwrapper li a .hover-item span::after {
+    color: #1f1f1f !important;
+}
+
+.active-dark:has(.rn-post-list-page .page-top) .rn-header.header-default.header-transparent:not(.scrolled) ul.mainmenuwrapper li a::after,
+.active-dark:has(.rn-category-post) .rn-header.header-default.header-transparent:not(.scrolled) ul.mainmenuwrapper li a::after,
+.active-dark:has(.rn-tag-post-area .page-top) .rn-header.header-default.header-transparent:not(.scrolled) ul.mainmenuwrapper li a::after,
+.active-dark:has(.rn-project-details-area .page-top) .rn-header.header-default.header-transparent:not(.scrolled) ul.mainmenuwrapper li a::after,
+.active-dark:has(.blog-details-wrapper .post-single-title) .rn-header.header-default.header-transparent:not(.scrolled) ul.mainmenuwrapper li a::after {
+    background: #1f1f1f !important;
+}
+
+/* Keep cart icon dark only at top on blog/project pages */
+.active-dark:has(.rn-post-list-page .page-top) .rn-header.header-default.header-transparent:not(.scrolled) .cartnav svg,
+.active-dark:has(.rn-post-list-page .page-top) .rn-header.header-default.header-transparent:not(.scrolled) .cartnav2 svg,
+.active-dark:has(.rn-category-post) .rn-header.header-default.header-transparent:not(.scrolled) .cartnav svg,
+.active-dark:has(.rn-category-post) .rn-header.header-default.header-transparent:not(.scrolled) .cartnav2 svg,
+.active-dark:has(.rn-tag-post-area .page-top) .rn-header.header-default.header-transparent:not(.scrolled) .cartnav svg,
+.active-dark:has(.rn-tag-post-area .page-top) .rn-header.header-default.header-transparent:not(.scrolled) .cartnav2 svg,
+.active-dark:has(.rn-project-details-area .page-top) .rn-header.header-default.header-transparent:not(.scrolled) .cartnav svg,
+.active-dark:has(.rn-project-details-area .page-top) .rn-header.header-default.header-transparent:not(.scrolled) .cartnav2 svg,
+.active-dark:has(.blog-details-wrapper .post-single-title) .rn-header.header-default.header-transparent:not(.scrolled) .cartnav svg,
+.active-dark:has(.blog-details-wrapper .post-single-title) .rn-header.header-default.header-transparent:not(.scrolled) .cartnav2 svg {
+    color: #1f1f1f !important;
+}
+
+/* Switch cart icon back to white when dark scrolled header is active */
+.active-dark:has(.rn-post-list-page .page-top) .rn-header.header-default.header-transparent.scrolled .cartnav svg,
+.active-dark:has(.rn-post-list-page .page-top) .rn-header.header-default.header-transparent.scrolled .cartnav2 svg,
+.active-dark:has(.rn-category-post) .rn-header.header-default.header-transparent.scrolled .cartnav svg,
+.active-dark:has(.rn-category-post) .rn-header.header-default.header-transparent.scrolled .cartnav2 svg,
+.active-dark:has(.rn-tag-post-area .page-top) .rn-header.header-default.header-transparent.scrolled .cartnav svg,
+.active-dark:has(.rn-tag-post-area .page-top) .rn-header.header-default.header-transparent.scrolled .cartnav2 svg,
+.active-dark:has(.rn-project-details-area .page-top) .rn-header.header-default.header-transparent.scrolled .cartnav svg,
+.active-dark:has(.rn-project-details-area .page-top) .rn-header.header-default.header-transparent.scrolled .cartnav2 svg,
+.active-dark:has(.blog-details-wrapper .post-single-title) .rn-header.header-default.header-transparent.scrolled .cartnav svg,
+.active-dark:has(.blog-details-wrapper .post-single-title) .rn-header.header-default.header-transparent.scrolled .cartnav2 svg {
+    color: #ffffff !important;
+}
+
+@media #{$sm-layout} {
+    .rn-slider-area .rn-slide.slider-style-01 .inner {
+        padding-top: 38px;
+    }
+
+    .rn-slider-area .rn-slide.slider-style-01 .inner .content .title {
+        font-size: 34px;
+        line-height: 1.24;
+        max-width: 92%;
+    }
+
+    .rn-slider-area .rn-slide.slider-style-01 .inner .content .subtitle {
+        font-size: 17px;
+        line-height: 1.7;
+        padding-top: 12px;
+    }
+
+    .rn-slider-area .rn-slide.slider-style-01 .inner .content .description {
+        font-size: 15px;
+        line-height: 1.8;
+        margin-top: 12px;
+        max-width: 94%;
+    }
+
+    .rn-slider-area .rn-slide.slider-style-01 .inner .content .button-group {
+        margin-top: 22px;
+        gap: 10px;
+    }
+
+    .about-style .content .title {
+        font-size: 31px;
+    }
+
+    .about-style .content .description {
+        font-size: 15px;
+        line-height: 1.8;
+        margin-bottom: 12px;
+    }
+
+    .rn-philosophy-area .philosophy-copy p,
+    .rn-veera-area .veera-copy p {
+        font-size: 15px;
+        line-height: 1.85;
+    }
+
+    .rn-post-area .section-title .essay-categories {
+        gap: 8px;
+    }
+
+    .rn-post-area .section-title .essay-categories span {
+        font-size: 12px;
+        padding: 7px 11px;
+    }
+
+    .rn-contact-area .info p {
+        font-size: 15px;
+        line-height: 1.8;
+    }
+}

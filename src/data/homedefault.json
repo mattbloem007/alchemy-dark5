@@ -1,21 +1,32 @@
 [
     {
         "name": "main-banner",
-        "title": "The Alchemy of <span class='remembrance'>Remembrance</span>",
-        "subtitle": "Living to create, learn, and explore the truth",
+        "title": "Restore & Return to Your Natural Rhythm",
+        "subtitle": "Herbal guidance, nervous system restoration, and embodied wellbeing with Matthew Gabriel.",
+        "description": "Supporting people in slowing down, restoring vitality, and reconnecting with the wisdom of the body through plant allies, nourishment, ritual, and simple daily practices.",
+        "primaryButton": "Work With Me",
+        "secondaryButton": "Explore Vee/Ra",
         "bgImage": "./images/banner/bg-image-02.jpg",
         "image": "./images/banner/person-image.jpg"
     },
 
     {
         "name": "about",
-        "title": "Matthew Gabriel",
-        "subtitle": "Traditional Medicine Man || Cacao Kuchina",
-        "description": "My name is Matthew Gabriel (MG). I am an initiated medicine man (Sangoma and Cacao Kuchina), working with cellular nutrition; a medicinal gateway to embodied Bliss.",
-        "description2": "I have been working with sacramental medicines since my trainings in 2017 - am a way finder of Truth, guided by the alchemy of human biology, plant nutrition, and computer technology.",
-        "description3": "My latest ceremonies are held as online and in person Nutritional Immersions. Nutritional Immersions include learning about Cacao as a superfood and soulfood to build your personal energy, vitality, and power. “ixCacao is a Hand Maiden Plant Spirit who will support your journey into the body.” With just the right amount, cacao enhances the effects of every nutrient that nourish, cleanse, and revitalises the body. Each nutritional immersion supports the intention of living a healthy, rhythmic lifestyle that assists in deepening your relationship with the body.",
-        "downloadButton": "Download CV",
-        "linkBUtton": "Send Message",
+        "title": "About Matthew Gabriel",
+        "subtitle": "",
+        "description": "I am an initiated Sangoma, nutritional practitioner, cacao guide, and founder of {{veeraBlends}}.",
+        "descriptionLinks": [
+            {
+                "key": "veeraBlends",
+                "text": "Vee/Ra Botanical Blends",
+                "url": "https://veera.co.za",
+                "newTab": true
+            }
+        ],
+        "description2": "My work explores the relationship between nervous system health, nourishment, embodiment, herbal wisdom, and sustainable wellbeing.",
+        "description3": "For many years I have worked closely with plant medicines and restorative wellness practices, learning how simple daily rituals can support deeper vitality, emotional balance, groundedness, and connection to life.",
+        "description4": "What I offer is less about quick fixes or intense transformation, and more about creating the conditions for the body to slowly return to its natural rhythm.",
+        "description5": "Through 1:1 guidance, herbal support, nutritional journeys, embodiment practices, and education, I support people in reconnecting with the wisdom of their own bodies and cultivating a more balanced way of living.",
         "aboutData": [
             {
                 "name": "aboutinfo-1",
@@ -75,8 +86,22 @@
     },
     {
         "name": "portfolio",
-        "title": "ixCacao Offerings",
-        "description": "Cacao ceremony for in person and online. Journey with cacao as a sacred medicine. Learn how to integrate this plant into your daily lifestyle"
+        "title": "Main Offerings",
+        "description": "Grounded pathways into nervous system restoration, herbal wellbeing, and embodied living.",
+        "offeringProjectMap": [
+            {
+                "key": "restoration",
+                "projectName": "sessions-with-matthew-gabriel"
+            },
+            {
+                "key": "journeys",
+                "projectName": "nutritional-journeys"
+            },
+            {
+                "key": "veera",
+                "projectName": "veera"
+            }
+        ]
     },
     {
         "name": "chooseus",
@@ -142,7 +167,7 @@
     },
     {
         "name": "contactus",
-        "title": "Get in Touch",
-        "subtitle": "Crowds are the most difficult thing for me these days because I have to walk with my head down and my eyes averted. There's still that part of me that wants to hold my head up, make eye contact and smile. (c)"
+        "title": "Book a Conversation",
+        "subtitle": "If you are ready to restore your natural rhythm, send a message and we can explore the most supportive next step together."
     }
 ]

@@ -30,14 +30,20 @@ Portfolio Details
                 line-height: 1.4;
                 font-size: 23px;
                 margin-bottom: 20px;
+                color: #111111;
             }
+
+            p {
+                color: #1f1f1f;
+            }
+
             ul {
                 &.list_holder {
                     @extend %liststyle;
                     li {
                         span {
                             &.icon {
-                                color: #000;
+                                color: #111111;
                                 font-weight: 500;
                                 min-width: 152px;
                                 display: inline-block;
@@ -49,7 +55,7 @@ Portfolio Details
                                 }
                             }
                             &.projectinfo {
-                                color: #6f6f6f;
+                                color: #1f1f1f;
                                 display: inline-block;
                                 line-height: 2;
                             }

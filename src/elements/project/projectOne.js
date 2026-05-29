@@ -10,7 +10,7 @@ const ProjectOne = () => {
             edges {
               node {
                 id
-                name
+                permalink
                 title
                 category
                 projectId
@@ -35,7 +35,7 @@ const ProjectOne = () => {
                     column="col-lg-6 col-12"
                     portfolioStyle="portfolio-style-1"
                     key={data.node.id}
-                    id={data.node.name}
+            id={data.node.permalink}
                     image={data.node.featured_image}
                     title={data.node.title}
                     category={data.node.category}

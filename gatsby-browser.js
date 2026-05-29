@@ -24,3 +24,31 @@ const Wrapper = ({ element }) => {
 }
 
 export const wrapPageElement = Wrapper
+
+export const onClientEntry = () => {
+  if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
+    window.history.scrollRestoration = "manual";
+  }
+};
+
+export const shouldUpdateScroll = ({ routerProps }) => {
+  if (routerProps?.location?.hash) {
+    return true;
+  }
+
+  // Disable Gatsby's saved-position restoration; we handle this in onRouteUpdate.
+  return false;
+};
+
+export const onRouteUpdate = ({ location }) => {
+  if (location?.hash) {
+    return;
+  }
+
+  if (typeof window !== "undefined") {
+    window.requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+      setTimeout(() => window.scrollTo(0, 0), 0);
+    });
+  }
+};

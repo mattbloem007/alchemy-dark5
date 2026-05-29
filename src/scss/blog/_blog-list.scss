@@ -6,6 +6,8 @@
     .section-title {
         .title {
             position: relative;
+            font-family: var(--font-secondary);
+            color: #111111;
             span {
                 &.bg {
                     position: absolute;
@@ -34,6 +36,31 @@
                 }
             }
         }
+
+        .description {
+            max-width: 700px;
+            color: #1f1f1f;
+            font-size: 16px;
+            line-height: 1.9;
+        }
+
+        .essay-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+
+            span {
+                display: inline-flex;
+                align-items: center;
+                font-size: 13px;
+                letter-spacing: 0.2px;
+                padding: 8px 14px;
+                border-radius: 999px;
+                background: #f2f1e9;
+                border: 1px solid #dddbc9;
+                color: #2c1d11;
+            }
+        }
     }
 }
 
@@ -41,12 +68,18 @@
 
 .content-block {
     margin-top: 50px;
+    border-radius: 14px;
+    background: #ffffff;
+    padding: 10px;
+    border: 1px solid #eceadf;
     .post-content {
         padding-top: 10px;
         .title {
             margin: 0;
             font-size: 20px;
             font-weight: 600;
+            font-family: var(--font-secondary);
+            color: #121212;
             margin-bottom: 10px;
             line-height: 1.4;
             @extend %transition;
@@ -54,9 +87,15 @@
                 color: var(--color-primary);
             }
         }
+
+        .title a {
+            color: #121212;
+        }
+
         .description {
             margin-top: 12px;
             margin-bottom: 9px;
+            color: #1f1f1f;
             line-height: 24px;
             letter-spacing: 0.8px;
         }
@@ -122,6 +161,39 @@
         .post-thubnail {
             img {
                 transform: scale(1.1) translateZ(0);
+            }
+        }
+    }
+}
+
+.rn-post-area.section-tone-light {
+    .content-block {
+        background: #fdfcf8;
+        border-color: #d9d1c3;
+
+        .post-content {
+            .title,
+            .title a {
+                color: #101010 !important;
+            }
+
+            .description {
+                color: #1b1b1b !important;
+                line-height: 1.75;
+                letter-spacing: 0.2px;
+            }
+
+            .read-more a {
+                color: #3b2a1b !important;
+                font-weight: 600;
+            }
+        }
+
+        .blog-meta {
+            span,
+            .author-name,
+            .category a {
+                color: #2a2a2a !important;
             }
         }
     }

@@ -3,17 +3,74 @@ import {useStaticQuery, graphql} from 'gatsby';
 import Img from "gatsby-image";
 import { Controller, Scene } from 'react-scrollmagic';
 
+const renderTextWithLinks = (text, links = []) => {
+    if (!text) return null;
+
+    const linkMap = links.reduce((acc, item) => {
+        if (item && item.key) {
+            acc[item.key] = item;
+        }
+        return acc;
+    }, {});
+
+    const tokenRegex = /{{\s*([\w-]+)\s*}}/g;
+    const parts = [];
+    let match;
+    let lastIndex = 0;
+
+    while ((match = tokenRegex.exec(text)) !== null) {
+        const tokenStart = match.index;
+        const tokenEnd = tokenRegex.lastIndex;
+        const tokenKey = match[1];
+        const linkData = linkMap[tokenKey];
+
+        if (tokenStart > lastIndex) {
+            parts.push(text.slice(lastIndex, tokenStart));
+        }
+
+        if (linkData?.url && linkData?.text) {
+            parts.push(
+                <a
+                    key={`link-${tokenKey}-${tokenStart}`}
+                    href={linkData.url}
+                    target={linkData.newTab ? '_blank' : undefined}
+                    rel={linkData.newTab ? 'noopener noreferrer' : undefined}
+                    style={{ textDecoration: 'underline', color: 'orange' }}
+                >
+                    {linkData.text}
+                </a>
+            );
+        } else {
+            parts.push(match[0]);
+        }
+
+        lastIndex = tokenEnd;
+    }
+
+    if (lastIndex < text.length) {
+        parts.push(text.slice(lastIndex));
+    }
+
+    return parts;
+};
+
 const About = ( ) => {
     const aboutQueryData = useStaticQuery(graphql`
         query AboutDefaultQuery {
             homedefaultJson (name: {eq: "about"}) {
                 title
                 description
+                descriptionLinks {
+                    key
+                    text
+                    url
+                    newTab
+                }
                 subtitle
                 description2
                 description3
-                downloadButton
-                linkBUtton
+                description4
+                description5
 
             },
             file(relativePath: {eq: "images/banner/person-image.jpg"}) {
@@ -29,10 +86,11 @@ const About = ( ) => {
     const title = aboutQueryData.homedefaultJson.title;
     const Subtitle = aboutQueryData.homedefaultJson.subtitle;
     const description = aboutQueryData.homedefaultJson.description;
+    const descriptionLinks = aboutQueryData.homedefaultJson.descriptionLinks;
     const description2 = aboutQueryData.homedefaultJson.description2;
     const description3 = aboutQueryData.homedefaultJson.description3;
-    const downloadButton = aboutQueryData.homedefaultJson.downloadButton;
-    const linkBUtton = aboutQueryData.homedefaultJson.linkBUtton;
+    const description4 = aboutQueryData.homedefaultJson.description4;
+    const description5 = aboutQueryData.homedefaultJson.description5;
     const PortfolioImages = aboutQueryData.file.childImageSharp.fixed;
 
 
@@ -58,16 +116,15 @@ const About = ( ) => {
                                 <div className="section-title" style={{textAlign: "center"}}>
                                     <div className="title-wrap">
                                         <h3 className="title wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms">{title}<span className="bg">About</span></h3>
-                                        {title && <h4 className="subtitle wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms" dangerouslySetInnerHTML={{ __html: Subtitle }}></h4>}
+                                        {Subtitle && <h4 className="subtitle wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms" dangerouslySetInnerHTML={{ __html: Subtitle }}></h4>}
                                     </div>
 
-                                    {description && <p className="description wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms" dangerouslySetInnerHTML={{ __html: description }}></p>}
-                                    {description2 && <p className="description wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms" dangerouslySetInnerHTML={{ __html: description2 }}></p>}
-                                    {description3 && <p className="description wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms" dangerouslySetInnerHTML={{ __html: description3 }}></p>}
+                                    {description && <p className="description wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms">{renderTextWithLinks(description, descriptionLinks)}</p>}
+                                    {description2 && <p className="description wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms">{renderTextWithLinks(description2)}</p>}
+                                    {description3 && <p className="description wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms">{renderTextWithLinks(description3)}</p>}
+                                    {description4 && <p className="description wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms">{renderTextWithLinks(description4)}</p>}
+                                    {description5 && <p className="description wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms">{renderTextWithLinks(description5)}</p>}
                                 </div>
-                                {/**<div className="button-group mt--30">
-                                    {downloadButton && <a className="rn-button wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms" href="#downloadbutton"><span>{downloadButton}</span></a>}
-                                </div>*/}
                             </div>
                         </div>
                     </div>

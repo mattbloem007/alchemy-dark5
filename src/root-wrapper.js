@@ -69,6 +69,7 @@ const Alchemy = (props) => {
           id: product.id,
           product_id: product.id,
           name: product.name,
+          metadata: product.metadata || {},
           image: { url: product.images?.[0] || "" },
           quantity,
           has: {

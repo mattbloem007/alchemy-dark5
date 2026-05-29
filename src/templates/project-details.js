@@ -1,16 +1,31 @@
-import React from 'react';
-import Img from "gatsby-image";
+import React, { useEffect } from 'react';
 import {GatsbyImage} from 'gatsby-plugin-image'
-import Image from "../elements/image";
-import { FiList, FiUser, FiInstagram, FiArrowLeftCircle } from "react-icons/fi";
-import Layout from "../components/layout";
+import { FiList, FiArrowLeftCircle } from "react-icons/fi";
 import { graphql, Link } from 'gatsby'
 import Calltoaction from '../elements/calltoaction/calltoaction'
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer"
 import { BLOCKS, MARKS } from "@contentful/rich-text-types"
 
-const Bold = ({ children }) => <span style={{color: "white"}}>{children}</span>
-const Text = ({ children }) => <p style={{color: "white", textAlign: "center"}}>{children}</p>
+const offeringMeta = {
+  restoration: {
+    title: '1:1 Restoration Sessions',
+    description: 'Personalized nervous system restoration sessions combining herbal guidance, embodiment practices, lifestyle support, breathwork, and restorative daily rituals.',
+    cta: 'Book a Session'
+  },
+  journeys: {
+    title: 'Nutritional Journeys',
+    description: 'Seasonal guided journeys exploring cacao, nourishment, cleansing, ritual, nervous system health, and embodied wellbeing through simple sustainable practices.',
+    cta: 'Explore Journeys'
+  },
+  veera: {
+    title: 'Vee/Ra Botanical Blends',
+    description: 'Herbal elixirs and cacao blends designed to support restoration, sustained energy, grounding, and everyday ritual.',
+    cta: 'Visit Vee/Ra'
+  }
+};
+
+const Bold = ({ children }) => <span style={{color: "#111111"}}>{children}</span>
+const Text = ({ children }) => <p style={{color: "#1f1f1f", textAlign: "left"}}>{children}</p>
 
 const options = {
   renderMark: {
@@ -31,9 +46,19 @@ const options = {
   },
 }
 
-const ProjectDetails = ({data}) => {
+const ProjectDetails = ({data, location}) => {
     const projectData = data.contentfulProjects;
-    console.log("DATA", projectData.featured_image.fullWidth)
+  const offeringKey = new URLSearchParams(location?.search || '').get('offering');
+  const selectedOffering = offeringMeta[offeringKey] || null;
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0);
+      window.requestAnimationFrame(() => {
+        window.scrollTo(0, 0);
+      });
+    }
+  }, [location?.pathname, location?.search]);
 
     return (
         <>
@@ -48,11 +73,14 @@ const ProjectDetails = ({data}) => {
                                             <div className="content-left">
                                                 <Link to="/#portfolio"><FiArrowLeftCircle size={50} /></Link>
                                                 <div className="page-top" style={{display: "flex", justifyContent: "center", textAlign: "center"}}>
-                                                    <h1 className="title_holder">{projectData.title}</h1>
+                                                  <h1 className="title_holder">{selectedOffering?.title || projectData.title}</h1>
                                                 </div>
                                                 <div className="thumbnail mt_md--40 mt_sm--40" style={{display: "flex", justifyContent: "center"}}>
-                                                  <GatsbyImage image={projectData.featured_image.fixed} alt={projectData.title}/>;
+                                                  <GatsbyImage image={projectData.featured_image.fixed} alt={projectData.title}/>
                                                 </div>
+                                                {selectedOffering?.description && (
+                                                  <p className="mt--30" style={{maxWidth: 720}}>{selectedOffering.description}</p>
+                                                )}
                                                 <h3 className="mt--20">Details</h3>
                                                 <ul className="list_holder">
                                                     <li><span className="icon"><FiList />Category:</span><span className="projectinfo">{projectData.category}</span></li>
@@ -60,7 +88,7 @@ const ProjectDetails = ({data}) => {
                                                     <li><span className="icon"><FiInstagram />Images by:</span><span className="projectinfo">{projectData.imgesBY}</span></li>*/}
                                                 </ul>
                                                 {projectData.body ? documentToReactComponents(JSON.parse(data.contentfulProjects.body.raw, options)) : null}
-                                                <Link style={{display: "flex", justifyContent: "center"}} to={`/store/${projectData.name}`}><Calltoaction title="" buttonText="Join this Journey" /></Link>
+                                                <Link style={{display: "flex", justifyContent: "center"}} to={`/store/${projectData.projectId}`}><Calltoaction title="" buttonText={selectedOffering?.cta || 'Join this Journey'} /></Link>
                                                 <Link to="/#portfolio"><FiArrowLeftCircle size={50} /></Link>
                                             </div>
                                         </div>
@@ -91,10 +119,10 @@ const ProjectDetails = ({data}) => {
 }
 
 export const query = graphql `
-query ProjectQuery($name: String!) {
-  contentfulProjects (name: { eq: $name } ){
+query ProjectQuery($permalink: String!) {
+  contentfulProjects (permalink: { eq: $permalink } ){
             id
-            name
+            permalink
             title
             body {
               raw

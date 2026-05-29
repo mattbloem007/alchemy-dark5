@@ -23,10 +23,16 @@ const CheckoutForm = ({
   };
 
   const createCheckoutSession = async (body) => {
-    const endpoints = [
-      "/.netlify/functions/create-stripe-checkout-session",
-      "/api/create-stripe-checkout-session"
-    ];
+    const isLocalhost =
+      typeof window !== "undefined" &&
+      (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+
+    const endpoints = isLocalhost
+      ? [
+          "http://localhost:9999/.netlify/functions/create-stripe-checkout-session",
+          "/.netlify/functions/create-stripe-checkout-session"
+        ]
+      : ["/.netlify/functions/create-stripe-checkout-session"];
     let lastError = null;
     for (const endpoint of endpoints) {
       try {
@@ -119,10 +125,19 @@ const CheckoutForm = ({
         ? JSON.parse(value.shippingOption)
         : null;
 
-      // Extract course info from first cart item's metadata
+      // Extract course info from first cart item.
+      // Supports camelCase and snake_case to match stored metadata variants.
       const firstItem = cart.line_items[0];
-      const courseId = firstItem?.metadata?.courseId || "";
-      const automationId = firstItem?.metadata?.automationId || "";
+      const courseId =
+        firstItem?.metadata?.courseId ||
+        firstItem?.metadata?.course_id ||
+        firstItem?.courseId ||
+        "";
+      const automationId =
+        firstItem?.metadata?.automationId ||
+        firstItem?.metadata?.automation_id ||
+        firstItem?.automationId ||
+        "";
 
       const origin = window.location.origin;
       const payload = await createCheckoutSession({

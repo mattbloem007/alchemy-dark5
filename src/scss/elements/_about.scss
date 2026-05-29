@@ -6,8 +6,8 @@ About Styles
     .content {
         .title-wrap {
             border-bottom: 1px solid rgba(0,0,0,.2);
-            padding-bottom: 25px;
-            margin-bottom: 25px;
+            padding-bottom: 22px;
+            margin-bottom: 30px;
             @media #{$md-layout} {
                 padding-bottom: 6px;
                 margin-bottom: 22px;
@@ -22,11 +22,12 @@ About Styles
             text-transform: uppercase;
             font-weight: 900;
             font-size: 35px;
+            font-family: var(--font-secondary);
             position: relative;
-            color: #000;
-            line-height: 1.4;
+            color: #111111;
+            line-height: 1.35;
             @media #{$sm-layout} {
-                font-size: 26px;
+                font-size: 28px;
             }
             span {
                 display: inline-block;
@@ -36,11 +37,11 @@ About Styles
                     left: 0;
                     top: 0;
                     color: transparent;
-                    font-size: 150px;
+                    font-size: 120px;
                     font-weight: 900;
                     opacity: .1;
                     line-height: 0;
-                    -webkit-text-stroke: 1px #000;
+                    -webkit-text-stroke: 1px #111111;
                     -webkit-user-select: none;
                     @media #{$lg-layout} {
                         font-size: 90px;
@@ -55,22 +56,22 @@ About Styles
             }
         }
         .subtitle {
-            font-weight: 600;
+            font-weight: 500;
             display: inline-block;
             font-size: 15px;
             line-height: 2.1;
             letter-spacing: .8px;
-            color: #333;
+            color: #1f1f1f;
         }
 
         .description {
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             font-size: 15px;
-            line-height: 2.1;
+            line-height: 2.05;
             letter-spacing: .8px;
             font-weight: 400;
-            color: #333;
-            padding-right: 14%;
+            color: #1f1f1f;
+            padding-right: 8%;
             font-family: 'Mulish', sans-serif;
             @media #{$sm-layout} {
                 padding-right: 0;

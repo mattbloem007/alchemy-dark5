@@ -20,9 +20,10 @@ const Contact = () => {
         }
     `);
     const Title = contactData.homedefaultJson.title;
+    const Subtitle = contactData.homedefaultJson.subtitle;
     const { site: { siteMetadata: { getform_url } } } = contactData;
     return (
-        <div className="rn-contact-area rn-section-gapBottom pt--200 bg-color-white" id="contact">
+        <div className="rn-contact-area section-tone-dark rn-section-gapBottom pt--100" id="contact">
             <div className="container">
                 <div className="row">
                     <div className="col-lg-12">
@@ -31,6 +32,7 @@ const Contact = () => {
                                 {Title}
                                 <span className="bg">Contact</span>
                             </h2>
+                            {Subtitle && <p className="description mt--20">{Subtitle}</p>}
                         </div>
                     </div>
                 </div>
@@ -39,7 +41,10 @@ const Contact = () => {
                     {/* Start Contact Form  */}
                     <div className="col-lg-6 col-12 mt--70 mt_md--30 mt_sm--40 wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms">
                         <div className="info">
-                            <p>Please fill out the form on this section to contact with me</p>
+                            <p>
+                                Share where you are right now, and what kind of support you are
+                                looking for. I will respond with the next simple step.
+                            </p>
                         </div>
                         <Contactform url={getform_url} />
                     </div>
@@ -47,7 +52,7 @@ const Contact = () => {
 
                     <div className="col-lg-6 col-12 mt--70 mt_md--30 mt_sm--40 wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms">
                         <div className="contact-info-list-wrapper" style={{display: "flex", justifyContent: "center"}}>
-                            <img src={logo} />
+                            <img src={logo} alt="Alchemy of Remembrance" />
                         </div>
                     </div>
                 </div>

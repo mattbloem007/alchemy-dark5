@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'gatsby';
 import {useStaticQuery, graphql} from 'gatsby';
 import Img from "gatsby-image";
 import { Controller, Scene } from 'react-scrollmagic';
@@ -9,6 +10,9 @@ const Banner = () => {
                 homedefaultJson(name: {eq: "main-banner"}) {
                 title
                 subtitle
+                description
+                primaryButton
+                secondaryButton
                 bgImage {
                     childImageSharp {
                         fluid(quality: 100, maxWidth: 1920, maxHeight: 850) {
@@ -33,6 +37,9 @@ const Banner = () => {
     const PortfolioImages = banenrQueryData.file.childImageSharp.fixed;
     const Title = banenrQueryData.homedefaultJson.title;
     const SubTitle = banenrQueryData.homedefaultJson.subtitle;
+    const Description = banenrQueryData.homedefaultJson.description;
+    const PrimaryButton = banenrQueryData.homedefaultJson.primaryButton;
+    const SecondaryButton = banenrQueryData.homedefaultJson.secondaryButton;
 
     return (
         <div className="rn-slider-area" id="home">
@@ -45,6 +52,17 @@ const Banner = () => {
                                 <div className="content text-left">
                                     <h1 className="title wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms" dangerouslySetInnerHTML={{ __html: Title }}></h1>
                                     <h4 className="subtitle wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="1000ms" dangerouslySetInnerHTML={{ __html: SubTitle }}></h4>
+                                    {Description && (
+                                        <p className="description wow fadeInLeft" data-wow-delay="300ms" data-wow-duration="1000ms">{Description}</p>
+                                    )}
+                                    <div className="button-group wow fadeInLeft" data-wow-delay="400ms" data-wow-duration="1000ms">
+                                        <Link className="rn-button" to="/#contact">
+                                            <span>{PrimaryButton}</span>
+                                        </Link>
+                                        <a className="rn-button secondary" href="https://veera.co.za" target="_blank" rel="noopener noreferrer">
+                                            <span>{SecondaryButton}</span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
 

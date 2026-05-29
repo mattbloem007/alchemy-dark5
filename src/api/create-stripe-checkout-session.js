@@ -13,7 +13,16 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { cart, customer, shippingAddress, shippingOption, successUrl, cancelUrl } = req.body || {};
+    const {
+      cart,
+      customer,
+      shippingAddress,
+      shippingOption,
+      successUrl,
+      cancelUrl,
+      courseId,
+      automationId,
+    } = req.body || {};
 
     if (!cart || !Array.isArray(cart.line_items) || cart.line_items.length === 0) {
       res.status(400).json({ error: "Cart is empty or invalid" });
@@ -55,7 +64,9 @@ export default async function handler(req, res) {
       customer_email: customer?.email || undefined,
       metadata: {
         customer_first_name: customer?.firstName || "",
-        customer_last_name: customer?.lastName || ""
+        customer_last_name: customer?.lastName || "",
+        course_id: courseId || "",
+        automation_id: automationId || "",
       },
       shipping_address_collection: shippingAddress
         ? { allowed_countries: ["ZA", "US", "GB", "CA", "AU"] }

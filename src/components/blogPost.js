@@ -5,7 +5,7 @@ import Blog from "./blog";
 const BlogPost = () => {
     const blogQueryData = useStaticQuery(graphql`
         query BlogListQuery {
-            allMarkdownRemark (limit: 4, sort: {order: DESC, fields: frontmatter___date}) {
+            allMarkdownRemark (limit: 3, sort: {order: DESC, fields: frontmatter___date}) {
                 edges {
                     node {
                         fields {
@@ -38,13 +38,30 @@ const BlogPost = () => {
     `);
 
     const blogs = blogQueryData.allMarkdownRemark.edges;
+    const essayCategories = [
+        'Nervous System & Burnout',
+        'Herbal Allies',
+        'Daily Rituals',
+        'Seasonal Living',
+        'Cacao & Embodiment'
+    ];
+
     return (
-        <div className="rn-post-area rn-section-gapBottom pt--200 bg-color-grey" id="news">
+        <div className="rn-post-area section-tone-light rn-section-gapBottom pt--100" id="news">
             <div className="container">
                 <div className="row">
                     <div className="col-lg-12">
-                        <div className="section-title mb--40">
-                            <h2 className="title">Nourishment for your Mind <span className="bg">Readings</span></h2>
+                        <div className="section-title mb--40" style={{textAlign: "center"}}>
+                            <h3 className="title">Essays for Embodied Living <span className="bg">Essays</span></h3>
+                            <p className="description mt--20">
+                                Reflections on nervous system restoration, herbal wellbeing,
+                                seasonal living, and grounded daily ritual.
+                            </p>
+                            <div className="essay-categories mt--30">
+                                {essayCategories.map((category) => (
+                                    <span key={category}>{category}</span>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
