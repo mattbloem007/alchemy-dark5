@@ -104,7 +104,7 @@ const Project = () => {
                     {offeringsContent.map((offering, index) => {
                         const project = configuredProjectByOffering[offering.key] || projects[index]?.node;
                         const projectSlug = project?.permalink ? slugify(project.permalink) : null;
-                        const path = projectSlug ? `/project/${projectSlug}?offering=${offering.key}` : '/offerings';
+                        const path = projectSlug ? `/project/${projectSlug}?offering=${offering.key}` : '/shop/offerings';
 
                         return (
                             <div className="col-lg-4 col-md-6 col-12" key={offering.title}>
@@ -140,7 +140,7 @@ const Project = () => {
                 <div className="row">
                     <div className="col-lg-12">
                         <div className="button-group mt--60 justify-content-center">
-                            <Link className="rn-button offerings-all-button" to="/offerings">
+                            <Link className="rn-button offerings-all-button" to="/shop/offerings">
                                 <span>Explore All Offerings</span>
                             </Link>
                         </div>

@@ -98,7 +98,7 @@ const Header = (props) => {
                                         </li>
 
                                         <li>
-                                            <Link className="menu-hover-link" to="/offerings">
+                                            <Link className="menu-hover-link" to="/shop/offerings">
                                                 <span className="hover-item">
                                                     <span data-text="Offerings">Offerings</span>
                                                 </span>

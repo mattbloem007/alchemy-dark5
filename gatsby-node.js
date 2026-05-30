@@ -315,19 +315,32 @@ exports.createPages = async ({actions, graphql}) => {
               };
             });
 
-            // Update offerings page with products data
+            const offeringsPageContext = { products };
+
+            // Update offerings pages with products data
             createPage({
               path: "/offerings",
               component: path.resolve("src/templates/offerings.js"),
-              context: {
-                products
-              }
+              context: offeringsPageContext
+            });
+            createPage({
+              path: "/shop/offerings",
+              component: path.resolve("src/templates/offerings.js"),
+              context: offeringsPageContext
             });
           } catch (err) {
             console.error("Failed to create offerings page:", err);
             // Still create the page without products as fallback
             createPage({
               path: "/offerings",
+              component: path.resolve("src/pages/offerings.js"),
+              context: {
+                products: [],
+                error: "Failed to load products"
+              }
+            });
+            createPage({
+              path: "/shop/offerings",
               component: path.resolve("src/pages/offerings.js"),
               context: {
                 products: [],

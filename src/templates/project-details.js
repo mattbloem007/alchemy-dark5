@@ -9,16 +9,19 @@ import { BLOCKS, MARKS } from "@contentful/rich-text-types"
 const offeringMeta = {
   restoration: {
     title: '1:1 Restoration Sessions',
+    category: 'session',
     description: 'Personalized nervous system restoration sessions combining herbal guidance, embodiment practices, lifestyle support, breathwork, and restorative daily rituals.',
     cta: 'Book a Session'
   },
   journeys: {
     title: 'Nutritional Journeys',
+    category: 'journey',
     description: 'Seasonal guided journeys exploring cacao, nourishment, cleansing, ritual, nervous system health, and embodied wellbeing through simple sustainable practices.',
     cta: 'Explore Journeys'
   },
   veera: {
     title: 'Vee/Ra Botanical Blends',
+    category: 'journey',
     description: 'Herbal elixirs and cacao blends designed to support restoration, sustained energy, grounding, and everyday ritual.',
     cta: 'Visit Vee/Ra'
   }
@@ -78,9 +81,9 @@ const ProjectDetails = ({data, location}) => {
                                                 <div className="thumbnail mt_md--40 mt_sm--40" style={{display: "flex", justifyContent: "center"}}>
                                                   <GatsbyImage image={projectData.featured_image.fixed} alt={projectData.title}/>
                                                 </div>
-                                                {selectedOffering?.description && (
+                                                {/**selectedOffering?.description && (
                                                   <p className="mt--30" style={{maxWidth: 720}}>{selectedOffering.description}</p>
-                                                )}
+                                                )*/}
                                                 <h3 className="mt--20">Details</h3>
                                                 <ul className="list_holder">
                                                     <li><span className="icon"><FiList />Category:</span><span className="projectinfo">{projectData.category}</span></li>
@@ -88,7 +91,12 @@ const ProjectDetails = ({data, location}) => {
                                                     <li><span className="icon"><FiInstagram />Images by:</span><span className="projectinfo">{projectData.imgesBY}</span></li>*/}
                                                 </ul>
                                                 {projectData.body ? documentToReactComponents(JSON.parse(data.contentfulProjects.body.raw, options)) : null}
-                                                <Link style={{display: "flex", justifyContent: "center"}} to={`/store/${projectData.projectId}`}><Calltoaction title="" buttonText={selectedOffering?.cta || 'Join this Journey'} /></Link>
+                                                <Link
+                                                  style={{display: "flex", justifyContent: "center"}}
+                                                  to={`/shop/offerings?category=${selectedOffering?.category || 'journey'}`}
+                                                >
+                                                  <Calltoaction title="" buttonText={selectedOffering?.cta || 'Join this Journey'} />
+                                                </Link>
                                                 <Link to="/#portfolio"><FiArrowLeftCircle size={50} /></Link>
                                             </div>
                                         </div>

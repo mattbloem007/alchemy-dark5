@@ -222,6 +222,38 @@ body {
     }
 }
 
+.offerings-showcase .offering-card .content .inner .button-group a.rn-button.secondary,
+.rn-post-list-page .button-group a.rn-button.secondary.offerings-filter-button {
+    background: transparent;
+    border-color: #7b664f;
+    color: #2a2117 !important;
+    box-shadow: none;
+}
+
+.offerings-showcase .offering-card .content .inner .button-group a.rn-button.secondary:hover,
+.rn-post-list-page .button-group a.rn-button.secondary.offerings-filter-button:hover {
+    background: #efe5d7;
+    border-color: #6f5b45;
+    color: #1d160f !important;
+}
+
+.rn-post-list-page .button-group a.rn-button.secondary.offerings-filter-button.active {
+    background: #6e512d;
+    border-color: #6e512d;
+    color: #ffffff !important;
+    box-shadow: 0 10px 24px rgba(110, 81, 45, 0.28);
+}
+
+.rn-post-list-page .button-group a.rn-button.secondary.offerings-filter-button.active span {
+    color: #ffffff !important;
+}
+
+.rn-post-list-page .button-group a.rn-button.secondary.offerings-filter-button.active:hover {
+    background: #5d4326;
+    border-color: #5d4326;
+    color: #ffffff !important;
+}
+
 .section-title.mb--40,
 .section-title.mb--40 * {
     text-align: center;
